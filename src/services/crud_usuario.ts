@@ -1,0 +1,56 @@
+import axios from "axios";
+import type { LoginResponse } from "../types/auth";
+
+const api = axios.create({
+  baseURL: "http://localhost:3000/api",
+});
+
+// Função auxiliar para obter os headers com o token atualizado
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("@FogoZero:token");
+  return {
+    headers: {
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+};
+
+export interface UserUpdateData {
+  nome?: string;
+  email?: string;
+  telefone?: string;
+  senha?: string;
+  senha_atual?: string;
+}
+
+// Busca os dados do perfil (GET /api/usuarios/:id)
+export const buscarPerfil = async (id: number) => {
+  try {
+    // O segundo parâmetro do GET é a configuração (headers)
+    const { data } = await api.get(`/usuarios/${id}`, getAuthHeaders());
+    return data;
+  } catch (error: any) {
+    throw error.response?.data?.mensagem || "Erro ao buscar dados do perfil";
+  }
+};
+
+// Atualiza dados do perfil (PATCH /api/usuarios/:id)
+export const atualizarPerfil = async (id: number, dados: UserUpdateData) => {
+  try {
+    // O terceiro parâmetro do PATCH é a configuração (headers)
+    const { data } = await api.patch(`/usuarios/${id}`, dados, getAuthHeaders());
+    return data;
+  } catch (error: any) {
+    throw error.response?.data?.mensagem || "Erro ao atualizar perfil";
+  }
+};
+
+// Exclui a própria conta (DELETE /api/usuarios/:id)
+export const excluirConta = async (id: number) => {
+  try {
+    // O segundo parâmetro do DELETE é a configuração (headers)
+    await api.delete(`/usuarios/${id}`, getAuthHeaders());
+  } catch (error: any) {
+    throw error.response?.data?.mensagem || "Erro ao excluir conta";
+  }
+};

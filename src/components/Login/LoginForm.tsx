@@ -1,7 +1,41 @@
+import React, { useState, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye } from "lucide-react";
+import authService from "../../services/auth"; // Importando seu service
 
-// src/components/LoginForm.tsx
 export function LoginForm() {
+  // Estados para capturar os dados dos inputs
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState("");
+
+  const navigate = useNavigate();
+
+  // Função que lida com o clique no botão (Envio do formulário)
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setErro("");
+    setLoading(true);
+
+    try {
+      // Usando a função login do seu authService
+      const data = await authService.login(email, senha);
+
+      // Salva no LocalStorage conforme planejado
+      localStorage.setItem("@FogoZero:token", data.token);
+      localStorage.setItem("@FogoZero:user", JSON.stringify(data.usuario));
+
+      // Redireciona para o dashboard
+      navigate("/dashboard");
+    } catch (err: any) {
+      // Exibe a mensagem de erro que vem do backend
+      setErro(err || "Falha na autenticação");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-md w-full">
       <h2 className="text-[2.5rem] font-extrabold text-black mb-2">
@@ -11,7 +45,14 @@ export function LoginForm() {
         Entre para acompanhar dados, receber alertas e monitorar sua região.
       </p>
 
-      <form className="flex flex-col">
+      {/* Exibição de erro caso a API retorne falha */}
+      {erro && (
+        <p className="text-red-600 text-sm font-bold mb-4 bg-red-50 p-2 rounded border border-red-200">
+          {erro}
+        </p>
+      )}
+
+      <form className="flex flex-col" onSubmit={handleSubmit}>
         {/* Campo de Email */}
         <div className="flex flex-col gap-1.5 mb-4">
           <label className="text-sm font-bold text-gray-700">Email</label>
@@ -19,8 +60,11 @@ export function LoginForm() {
             <Mail className="absolute left-3 text-gray-400" size={18} />
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Coloque seu email aqui"
               className="w-full p-2.5 pl-10 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all"
+              required
             />
           </div>
         </div>
@@ -32,8 +76,11 @@ export function LoginForm() {
             <Lock className="absolute left-3 text-gray-400" size={18} />
             <input
               type="password"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
               placeholder="Insira sua senha aqui"
               className="w-full p-2.5 pl-10 pr-10 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all"
+              required
             />
             <Eye
               className="absolute right-3 text-gray-400 cursor-pointer"
@@ -57,8 +104,12 @@ export function LoginForm() {
         </div>
 
         {/* Botão de Ação */}
-        <button className="w-full bg-[#bd1522] text-white py-3.5 rounded-xl font-bold text-base hover:bg-[#a0121d] transition-all shadow-md active:scale-[0.98] mb-4">
-          Acessar Minha Conta
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-[#bd1522] text-white py-3.5 rounded-xl font-bold text-base hover:bg-[#a0121d] transition-all shadow-md active:scale-[0.98] mb-4 disabled:opacity-70"
+        >
+          {loading ? "Carregando..." : "Acessar Minha Conta"}
         </button>
 
         <p className="text-center text-xs text-gray-500">

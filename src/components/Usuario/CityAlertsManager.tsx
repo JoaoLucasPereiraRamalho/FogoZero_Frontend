@@ -1,57 +1,140 @@
+import React, { useState, useEffect } from "react";
+import { 
+  registrarMonitoramento, 
+  listarMonitoramentos, 
+  deletarMonitoramento 
+} from "../../services/monitoramento";
+import { getLoggedUser } from "../../utils/auth";
+import { Loader2, Trash2, MapPin } from "lucide-react";
+
+const CIDADES_DISPONIVEIS = ["Lavras", "Belo Horizonte", "Uberlândia", "Varginha", "Itajubá"];
+
 export function CityAlertsManager() {
-  const cidades = [
-    "São José dos Campos",
-    "Cidade2",
-    "Cidade3",
-    "Cidade4",
-    "Cidade5",
-  ];
+  const [monitoramentos, setMonitoramentos] = useState<any[]>([]);
+  const [cidadeSelecionada, setCidadeSelecionada] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+  
+  const user = getLoggedUser();
+
+  // Carrega as cidades ao iniciar
+  useEffect(() => {
+    if (user?.id) {
+      carregarCidades();
+    }
+  }, [user?.id]);
+
+  const carregarCidades = async () => {
+    try {
+      setFetching(true);
+      const dados = await listarMonitoramentos(user.id);
+      setMonitoramentos(dados);
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setFetching(false);
+    }
+  };
+
+  const handleAdd = async () => {
+    if (!cidadeSelecionada || !user) return;
+
+    setLoading(true);
+    try {
+      await registrarMonitoramento({
+        cidade: cidadeSelecionada,
+        estado: "MG",
+        usuarioId: user.id,
+        notificar: true
+      });
+      
+      setCidadeSelecionada("");
+      await carregarCidades(); // Recarrega a lista do banco
+    } catch (err: any) {
+      alert(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemove = async (id: number) => {
+    if (!window.confirm("Deseja parar de monitorar esta cidade?")) return;
+    
+    try {
+      await deletarMonitoramento(id);
+      // Filtra localmente para resposta instantânea na UI
+      setMonitoramentos(prev => prev.filter(m => m.id !== id));
+    } catch (err: any) {
+      alert(err);
+    }
+  };
 
   return (
     <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm h-full">
-      <h3 className="text-lg font-bold text-black mb-1">
-        Alertas por município
-      </h3>
+      <h3 className="text-lg font-bold text-black mb-1">Alertas por município</h3>
       <p className="text-[11px] text-gray-500 mb-6 leading-tight">
-        Escolha as cidades que você deseja acompanhar e receba alertas sobre
-        focos de incêndio e riscos ambientais.
+        Escolha as cidades que deseja acompanhar para o monitoramento FogoZero.
       </p>
 
       <div className="flex flex-col gap-2 mb-8">
-        <select className="w-full p-2.5 border border-gray-300 rounded-lg text-sm text-gray-400 outline-none">
-          <option>Placeholder</option>
+        <select 
+          value={cidadeSelecionada}
+          onChange={(e) => setCidadeSelecionada(e.target.value)}
+          className="w-full p-2.5 border border-gray-300 rounded-lg text-sm text-gray-600 outline-none"
+        >
+          <option value="">Selecione uma cidade...</option>
+          {CIDADES_DISPONIVEIS.map(c => (
+            <option key={c} value={c}>{c}</option>
+          ))}
         </select>
-        <button className="self-end bg-[#bd1522] text-white px-6 py-2 rounded-lg font-bold text-xs uppercase">
+        
+        <button 
+          onClick={handleAdd}
+          disabled={loading || !cidadeSelecionada}
+          className="self-end bg-[#bd1522] text-white px-6 py-2 rounded-lg font-bold text-xs uppercase disabled:opacity-50 flex items-center gap-2"
+        >
+          {loading && <Loader2 size={12} className="animate-spin" />}
           Adicionar município
         </button>
       </div>
 
       <div className="border border-gray-100 rounded-xl p-4">
         <h4 className="text-sm font-bold mb-1">Cidades monitoradas</h4>
-        <p className="text-[10px] text-gray-400 mb-4">
-          Ative ou desative os alertas e remova municípios conforme seu
-          interesse.
-        </p>
-
-        <div className="space-y-3">
-          {cidades.map((cidade, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between text-[11px] pb-2 border-b border-gray-50 last:border-0"
-            >
-              <span className="font-medium text-gray-600">{cidade}</span>
-              <div className="flex gap-2">
-                <select className="bg-[#bd1522] text-white px-2 py-1 rounded text-[10px] outline-none">
-                  <option>Desativado</option>
-                  <option>Ativado</option>
-                </select>
-                <button className="bg-gray-800 text-white px-3 py-1 rounded text-[10px] font-bold">
-                  Remover
-                </button>
+        
+        {fetching ? (
+          <div className="flex justify-center py-4">
+            <Loader2 className="animate-spin text-gray-400" size={20} />
+          </div>
+        ) : (
+          <div className="space-y-3 mt-4">
+            {monitoramentos.length === 0 && (
+              <p className="text-[10px] text-gray-400 italic">Nenhuma cidade monitorada no momento.</p>
+            )}
+            
+            {monitoramentos.map((m) => (
+              <div
+                key={m.id}
+                className="flex items-center justify-between text-[11px] pb-2 border-b border-gray-50 last:border-0"
+              >
+                <div className="flex items-center gap-2">
+                  <MapPin size={12} className="text-red-700" />
+                  <span className="font-medium text-gray-600">{m.cidade}</span>
+                </div>
+                <div className="flex gap-2">
+                  <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-[9px] font-bold">
+                    {m.notificar ? "ATIVO" : "OFF"}
+                  </span>
+                  <button 
+                    onClick={() => handleRemove(m.id)}
+                    className="bg-gray-800 text-white px-3 py-1 rounded text-[10px] font-bold hover:bg-black"
+                  >
+                    Remover
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
