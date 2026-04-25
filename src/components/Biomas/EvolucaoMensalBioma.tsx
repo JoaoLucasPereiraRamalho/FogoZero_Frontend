@@ -37,6 +37,7 @@ interface EvolucaoResponse {
 interface Props {
   id: string | number;
   ano: number;
+  onBiomaChange?: (bioma: { id: number; descricao: string }) => void;
 }
 
 const getBiomaId = (id: string | number, biomas: BiomaLista[]) => {
@@ -46,7 +47,7 @@ const getBiomaId = (id: string | number, biomas: BiomaLista[]) => {
   return encontrado?.id || biomas[0]?.id || 1;
 };
 
-export function EvolucaoMensalBioma({ id, ano }: Props) {
+export function EvolucaoMensalBioma({ id, ano, onBiomaChange }: Props) {
   // Estados
   const [biomasDisponiveis, setBiomasDisponiveis] = useState<BiomaLista[]>([]);
   const [biomaAtivoId, setBiomaAtivoId] = useState<number | null>(null);
@@ -70,7 +71,12 @@ export function EvolucaoMensalBioma({ id, ano }: Props) {
         const listaBiomas = distribuicao?.biomas || [];
         if (listaBiomas.length > 0) {
           setBiomasDisponiveis(listaBiomas);
-          setBiomaAtivoId(getBiomaId(id, listaBiomas));
+          const idInicial = getBiomaId(id, listaBiomas);
+          setBiomaAtivoId(idInicial);
+          const biomaInicial = listaBiomas.find((bioma) => bioma.id === idInicial);
+          if (biomaInicial && onBiomaChange) {
+            onBiomaChange({ id: biomaInicial.id, descricao: biomaInicial.descricao });
+          }
         }
       } catch (err) {
         console.error("Erro ao carregar lista de biomas:", err);
@@ -80,7 +86,7 @@ export function EvolucaoMensalBioma({ id, ano }: Props) {
       }
     }
     carregarListaBiomas();
-  }, [ano, id]);
+  }, [ano, id, onBiomaChange]);
 
   // 2. REAÇÃO À ESCOLHA: Busca a evolução sempre que o biomaAtivo mudar
   useEffect(() => {
@@ -136,7 +142,19 @@ export function EvolucaoMensalBioma({ id, ano }: Props) {
         <div className="relative min-w-[220px]">
           <select
             value={biomaAtivoId ?? ""}
-            onChange={(e) => setBiomaAtivoId(Number(e.target.value))}
+            onChange={(e) => {
+              const novoId = Number(e.target.value);
+              setBiomaAtivoId(novoId);
+              const biomaSelecionado = biomasDisponiveis.find(
+                (bioma) => bioma.id === novoId,
+              );
+              if (biomaSelecionado && onBiomaChange) {
+                onBiomaChange({
+                  id: biomaSelecionado.id,
+                  descricao: biomaSelecionado.descricao,
+                });
+              }
+            }}
             className="w-full appearance-none bg-gray-50 border border-gray-100 px-4 py-3 rounded-xl font-bold text-xs outline-none focus:ring-2 focus:ring-red-100 transition-all cursor-pointer pr-10"
           >
             {biomasDisponiveis.map((bioma) => (

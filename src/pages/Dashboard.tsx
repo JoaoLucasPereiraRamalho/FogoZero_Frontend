@@ -43,6 +43,7 @@ export function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [anoFiltro] = useState(2026);
   const [biomaFoco, setBiomaFoco] = useState<string>("");
+  const [biomaFocoId, setBiomaFocoId] = useState<number>(1);
 
   // Carrega todos os municípios na inicialização
   useEffect(() => {
@@ -62,7 +63,9 @@ export function DashboardPage() {
         if (listaOrdenada.length > 0) {
           const primeiraCity = listaOrdenada[0];
           setMunicipioAtivo(primeiraCity);
-          setBiomaFoco(primeiraCity.bioma_mais_afetado || "Cerrado");
+          const biomaInicial = primeiraCity.bioma_mais_afetado || "Cerrado";
+          setBiomaFoco(biomaInicial);
+          setBiomaFocoId(getBiomaId(biomaInicial));
         }
       } catch (err) {
         console.error("Erro ao carregar lista de cidades:", err);
@@ -77,6 +80,7 @@ export function DashboardPage() {
   useEffect(() => {
     if (municipioAtivo?.bioma_mais_afetado) {
       setBiomaFoco(municipioAtivo.bioma_mais_afetado);
+      setBiomaFocoId(getBiomaId(municipioAtivo.bioma_mais_afetado));
     }
   }, [municipioAtivo]);
 
@@ -149,12 +153,19 @@ export function DashboardPage() {
                 </div>
               </div>
 
-              <EvolucaoMensalBioma id={getBiomaId(biomaFoco)} ano={anoFiltro} />
+              <EvolucaoMensalBioma
+                id={biomaFocoId}
+                ano={anoFiltro}
+                onBiomaChange={({ id, descricao }) => {
+                  setBiomaFocoId(id);
+                  setBiomaFoco(descricao);
+                }}
+              />
             </div>
 
             {/* Estatísticas */}
             <div className="lg:col-span-1">
-              <EstatisticasBioma id={getBiomaId(biomaFoco)} ano={anoFiltro} />
+              <EstatisticasBioma id={biomaFocoId} ano={anoFiltro} />
             </div>
           </section>
         </div>

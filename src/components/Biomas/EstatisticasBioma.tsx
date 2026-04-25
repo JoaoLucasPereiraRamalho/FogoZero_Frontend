@@ -28,21 +28,9 @@ interface EstatisticasData {
 }
 
 interface Props {
-  id: string | number; // Recebe o nome do bioma (ex: "Cerrado") ou o ID ("1")
+  id: string | number;
   ano: number;
 }
-
-// --- Dicionário de Conversão (De-Para) ---
-// IMPORTANTE: Atualize estes números com os IDs reais da sua tabela de biomas no banco!
-const BIOMAS_MAP: Record<string, number> = {
-  Município: 1,
-  Amazônia: 2,
-  Caatinga: 3,
-  Cerrado: 4,
-  "Mata Atlântica": 5,
-  Pampa: 6,
-  Pantanal: 7,
-};
 
 export function EstatisticasBioma({ id, ano }: Props) {
   const [stats, setStats] = useState<EstatisticasData | null>(null);
@@ -51,24 +39,22 @@ export function EstatisticasBioma({ id, ano }: Props) {
 
   useEffect(() => {
     async function carregarStats() {
-      if (!id) return;
+      if (!id) {
+        setErro("Bioma inválido para consulta.");
+        setLoading(false);
+        return;
+      }
 
       try {
         setLoading(true);
         setErro(null);
 
-        // 1. Lógica de Conversão Robusta para o Backend
-        let idNumerico: number;
-
-        if (typeof id === "number") {
-          idNumerico = id; // Já é número
-        } else if (!isNaN(Number(id))) {
-          idNumerico = Number(id); // É uma string numérica (ex: "1")
-        } else {
-          idNumerico = BIOMAS_MAP[id] || 1; // É um nome (ex: "Cerrado"). Fallback para 1.
+        const idNumerico = typeof id === "number" ? id : Number(id);
+        if (!Number.isFinite(idNumerico)) {
+          throw new Error("ID de bioma inválido.");
         }
 
-        // 2. Chamada à API enviando um Inteiro
+        // Endpoint espera id numérico.
         const dados = await biomaService.getEstatisticas(idNumerico, ano);
 
         if (dados && dados.maior_registro) {
