@@ -26,9 +26,11 @@ export interface UserUpdateData {
 // Busca os dados do perfil (GET /api/usuarios/:id)
 export const buscarPerfil = async (id: number) => {
   try {
-    // O segundo parâmetro do GET é a configuração (headers)
     const { data } = await api.get(`/usuarios/${id}`, getAuthHeaders());
-    return data;
+
+    // Como seu backend retorna { usuario: { ... } },
+    // precisamos acessar a chave 'usuario'
+    return data.usuario;
   } catch (error: any) {
     throw error.response?.data?.mensagem || "Erro ao buscar dados do perfil";
   }
@@ -38,7 +40,11 @@ export const buscarPerfil = async (id: number) => {
 export const atualizarPerfil = async (id: number, dados: UserUpdateData) => {
   try {
     // O terceiro parâmetro do PATCH é a configuração (headers)
-    const { data } = await api.patch(`/usuarios/${id}`, dados, getAuthHeaders());
+    const { data } = await api.patch(
+      `/usuarios/${id}`,
+      dados,
+      getAuthHeaders(),
+    );
     return data;
   } catch (error: any) {
     throw error.response?.data?.mensagem || "Erro ao atualizar perfil";
@@ -52,5 +58,15 @@ export const excluirConta = async (id: number) => {
     await api.delete(`/usuarios/${id}`, getAuthHeaders());
   } catch (error: any) {
     throw error.response?.data?.mensagem || "Erro ao excluir conta";
+  }
+};
+
+export const listarTodosUsuarios = async () => {
+  try {
+    const { data } = await api.get("/usuarios", getAuthHeaders());
+    // Se o backend usa buildPaginationResponse, os dados estão em data.data
+    return data.data || data;
+  } catch (error: any) {
+    throw error.response?.data?.mensagem || "Erro ao listar usuários";
   }
 };

@@ -50,3 +50,12 @@ export const listarReportesPorUsuario = async (usuarioId: number): Promise<any[]
   }
 };
 
+export const criarPrimeiroReporte = async (dados: PrimeiroReporteData) => {
+  try {
+    const { data } = await api.post("/reportes/primeiro", dados);
+    return data;
+  } catch (error: any) {
+    throw error.response?.data?.error || "Erro ao realizar cadastro e reporte";
+  }
+};
+

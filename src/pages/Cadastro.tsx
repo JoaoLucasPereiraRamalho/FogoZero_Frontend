@@ -10,9 +10,9 @@ export function Cadastro() {
       <main className="flex-grow flex items-center justify-center p-6 bg-white">
         <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Lado Esquerdo: Área da Imagem Arredondada */}
-          <div className="hidden lg:block h-[700px] bg-gray-200 rounded-[3rem] overflow-hidden">
+          <div className="hidden lg:block h-[800px] bg-gray-200 rounded-[3rem] overflow-hidden">
             <img
-              src="/path-to-your-background.jpg"
+              src="/public/cadastro.png"
               alt="Incêndio Florestal"
               className="w-full h-full object-cover opacity-80"
             />

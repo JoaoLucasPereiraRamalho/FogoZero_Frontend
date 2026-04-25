@@ -11,7 +11,7 @@ export function LoginPage() {
           {/* Lado Esquerdo: Imagem Arredondada (Destaque visual) */}
           <div className="hidden lg:block h-[600px] bg-gray-100 rounded-[3rem] overflow-hidden shadow-inner">
             <img
-              src="/caminho-para-sua-foto-fogo.jpg"
+              src="/public/login.png"
               alt="Monitoramento FogoZero"
               className="w-full h-full object-cover opacity-90"
             />

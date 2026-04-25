@@ -5,6 +5,7 @@ import { AdminNewsCard } from "../components/Admin/AdminNewsCard";
 import { noticiaService } from "../services/noticia";
 import type { Noticia } from "../types/noticia";
 import { Header } from "../components/Header";
+import { AdminUserList } from "../components/Admin/AdminUserList";
 
 export default function AdminPage() {
   const [noticias, setNoticias] = useState<Noticia[]>([]);
@@ -51,6 +52,7 @@ export default function AdminPage() {
       <Header />
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Componente do Cabeçalho com o Título e Botões de Opção */}
+        <AdminUserList />
 
         {/* Container Branco Arredondado (conforme a imagem Area_adm.jpg) */}
         <div className="mt-8 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-8 md:p-12">

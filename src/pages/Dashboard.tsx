@@ -1,73 +1,97 @@
-import { StatCard } from "../components/Dashboard//StatCard";
-import { HeatMapSection } from "../components/Dashboard//HeatMapSection";
-import { EvolutionChart } from "../components/Dashboard/EvolutionChart";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { Dashboard } from "../components/Dashboard/Dashboard";
 import { Header } from "../components/Header";
+import { DashboardGraficos } from "../components/Dashboard/DashboardGraficos";
+import { CitySelector } from "../components/Dashboard/CitySelector";
+import { municipioService } from "../services/municipio";
+
+interface Municipio {
+  id: number;
+  municipio: string;
+  lat: number;
+  lon: number;
+  numero_focos?: number;
+  imri?: number;
+  classificacao_imri?: string;
+  bioma_mais_afetado?: string;
+  mes_mais_afetado?: string;
+}
 
 export function DashboardPage() {
+  const [municipios, setMunicipios] = useState<Municipio[]>([]);
+  const [municipioAtivo, setMunicipioAtivo] = useState<Municipio | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Carrega todos os municípios na inicialização
+  useEffect(() => {
+    async function carregarCidades() {
+      try {
+        setLoading(true);
+        const resposta = await municipioService.listar();
+
+        // Ordena alfabeticamente
+        const listaOrdenada = [...resposta].sort((a, b) =>
+          a.municipio.localeCompare(b.municipio),
+        );
+
+        setMunicipios(listaOrdenada);
+
+        // Define a primeira cidade como padrão
+        if (listaOrdenada.length > 0) {
+          setMunicipioAtivo(listaOrdenada[0]);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar lista de cidades:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    carregarCidades();
+  }, []);
+
+  if (loading)
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-[#f8f9fa]">
+        <Loader2 className="animate-spin text-[#bd1522] mb-4" size={40} />
+        <p className="text-gray-500 font-bold text-xs uppercase tracking-widest">
+          Sincronizando dados de Minas Gerais...
+        </p>
+      </div>
+    );
+
   return (
     <main className="min-h-screen bg-[#f8f9fa] pb-20">
       <Header />
-      <div className="max-w-7xl mx-auto px-6 pt-12">
-        <header className="mb-12">
-          <h1 className="text-[2.5rem] font-extrabold text-black mb-2 leading-tight">
-            Analise o risco de <br /> incêndios na sua região
-          </h1>
-          <p className="text-gray-500 text-sm max-w-2xl">
-            Visualize os dados e entenda os focos de incêndio. Utilize os
-            filtros para uma análise personalizada.
-          </p>
-        </header>
 
-        {/* Filtros de topo */}
-        <div className="flex gap-4 mb-8 items-center">
-          <span className="text-xs font-bold">Escolha uma região:</span>
-          <select className="border rounded-lg px-4 py-2 text-xs outline-none bg-white">
-            <option>Lavras-MG</option>
-          </select>
-          <button className="bg-[#bd1522] text-white px-6 py-2 rounded-lg text-xs font-bold">
-            Município
-          </button>
-          <button className="bg-[#bd1522] text-white px-6 py-2 rounded-lg text-xs font-bold">
-            Bioma
-          </button>
-        </div>
+      {/* Seção com Cabeçalho e Seletor de Cidade Unificado */}
+      <div className="pt-12 px-6">
+        <div className="max-w-7xl mx-auto">
+          <header className="mb-12">
+            <h1 className="text-4xl font-black text-black mb-2">
+              Monitoramento FogoZero
+            </h1>
+            <p className="text-gray-500 text-sm">
+              Dados consolidados de {municipios.length} municípios mineiros.
+            </p>
+          </header>
 
-        {/* Grid de Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <StatCard
-            label="Total de focos registrados"
-            value="1.000%"
-            description="Dados coletados na região"
-          />
-          <StatCard
-            label="Média Estadual"
-            value="1.000%"
-            description="Comparativo com Minas Gerais"
-          />
-          <StatCard
-            label="Bioma predominante"
-            value="Cerrado"
-            description="Vegetação local"
-          />
-          <div className="bg-white p-5 rounded-2xl border border-gray-100 flex items-center justify-center">
-            <div className="text-center font-bold text-green-600 text-3xl">
-              +12%
-            </div>
+          {/* INPUT UNIFICADO */}
+          <div className="mb-12">
+            <CitySelector
+              municipios={municipios}
+              municipioSelecionado={municipioAtivo}
+              onCityChange={setMunicipioAtivo}
+            />
           </div>
         </div>
-
-        <HeatMapSection />
-
-        <EvolutionChart title="Evolução das queimadas ao longo do tempo" />
-
-        {/* Seção de Análise Ambiental (Gráfico de Rosca) */}
-        <div className="mt-20">
-          <h2 className="text-3xl font-extrabold mb-8">
-            Análise ambiental das queimadas
-          </h2>
-          <EvolutionChart title="Evolução das queimadas nos biomas da região" />
-        </div>
       </div>
+
+      {/* Dashboard com Cards */}
+      <Dashboard municipioAtivo={municipioAtivo} />
+
+      {/* Seção com Gráficos e Mapas */}
+      <DashboardGraficos municipioSelecionado={municipioAtivo} />
     </main>
   );
 }

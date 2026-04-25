@@ -1,17 +1,48 @@
-export function AboutSection() {
-  return (
-    <section className="max-w-7xl mx-auto px-4 py-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-start">
-        {/* Coluna da Esquerda (Textos) */}
-        <div>
-          <h2 className="text-[2rem] font-extrabold text-black mb-1">
-            Conheça o FogoZero
-          </h2>
-          <h3 className="text-xl text-gray-700 mb-6">
-            Uma plataforma para informar e agir!
-          </h3>
+import { MapPin, Megaphone, Bell, Flame } from "lucide-react";
 
-          <div className="space-y-4 text-sm text-gray-600 leading-relaxed">
+export function AboutSection() {
+  const infoCards = [
+    {
+      title: "Acompanhe sua cidade",
+      desc: "Veja mapas e indicadores atualizados",
+      icon: <MapPin className="text-[#bd1522]" size={20} />,
+      gradient: "from-red-100/60",
+    },
+    {
+      title: "Reporte ocorrências",
+      desc: "Ajude a identificar focos de incêndio",
+      icon: <Megaphone className="text-[#bd1522]" size={20} />,
+      gradient: "from-orange-100/60",
+    },
+    {
+      title: "Receba alertas",
+      desc: "Seja avisado sobre riscos na sua região",
+      icon: <Bell className="text-orange-500" size={20} />,
+      gradient: "from-orange-100/40",
+    },
+    {
+      title: "Acompanhe as queimadas",
+      desc: "Veja como os incêndios mudaram ao longo do tempo.",
+      icon: <Flame className="text-[#bd1522]" size={20} />,
+      gradient: "from-red-100/60",
+    },
+  ];
+
+  return (
+    <section className="max-w-7xl mx-auto px-6 py-24 ">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
+        {/* Coluna da Esquerda (Textos) */}
+        <div className="flex flex-col space-y-6">
+          <div>
+            <h2 className="text-4xl lg:text-[2.6rem] font-bold text-black leading-tight mb-2">
+              Conheça o FogoZero
+            </h2>
+            <h3 className="text-2xl font-medium text-gray-800">
+              Uma plataforma para informar e agir!
+            </h3>
+          </div>
+
+          <div className="space-y-5 text-[15px] text-gray-600 leading-relaxed text-justify">
             <p>
               O FogoZero MG é uma plataforma criada para facilitar o acesso a
               informações sobre incêndios ambientais e riscos de queimadas em
@@ -39,69 +70,30 @@ export function AboutSection() {
         </div>
 
         {/* Coluna da Direita (Cards) */}
-        <div className="flex flex-col gap-4">
-          {/* Card 1 - Destaque */}
-          <div className="relative overflow-hidden bg-white border border-gray-200 rounded-xl shadow-sm p-5 pl-6 flex items-start gap-4">
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-red-100/70 to-transparent border-l-4 border-[#bd1522] pointer-events-none"></div>
-            <div className="z-10 mt-0.5 text-gray-400">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="12" cy="12" r="10"></circle>
-              </svg>
-            </div>
-            <div className="z-10">
-              <strong className="block text-black text-sm mb-0.5 uppercase tracking-wide">
-                Monitore sua região
-              </strong>
-              <p className="text-[13px] text-gray-500">
-                Dados atualizados em mapas e gráficos interativos.
-              </p>
-            </div>
-          </div>
-
-          {/* Cards normais */}
-          {[
-            {
-              title: "Reporte ocorrências",
-              desc: "Sua observação pode ajudar na prevenção.",
-            },
-            {
-              title: "Fique informado",
-              desc: "Receba avisos quando houver risco na sua região.",
-            },
-            {
-              title: "Fique informado",
-              desc: "Receba avisos quando houver risco na sua região.",
-            }, // Repetido conforme o design
-          ].map((item, index) => (
+        <div className="flex flex-col gap-5">
+          {infoCards.map((card, index) => (
             <div
               key={index}
-              className="relative overflow-hidden bg-white border border-gray-200 rounded-xl shadow-sm p-5 pl-6 flex items-start gap-4 hover:shadow-md transition-shadow"
+              className="group relative overflow-hidden bg-[#f3f4f6]/40 border border-gray-100 rounded-[1.8rem] p-6 flex items-center gap-6 shadow-sm hover:shadow-md transition-all duration-300"
             >
-              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-100/50 to-transparent border-l-4 border-transparent pointer-events-none"></div>
-              <div className="z-10 mt-0.5 text-gray-400">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <circle cx="12" cy="12" r="10"></circle>
-                </svg>
+              {/* Gradiente Lateral (O toque do design) */}
+              <div
+                className={`absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r ${card.gradient} to-transparent pointer-events-none`}
+              />
+
+              {/* Container do Ícone */}
+              <div className="z-10 bg-white p-3.5 rounded-2xl shadow-sm border border-gray-50 group-hover:scale-105 transition-transform">
+                {card.icon}
               </div>
+
+              {/* Textos */}
               <div className="z-10">
-                <strong className="block text-black text-sm mb-0.5 uppercase tracking-wide">
-                  {item.title}
-                </strong>
-                <p className="text-[13px] text-gray-500">{item.desc}</p>
+                <h4 className="text-sm font-black text-gray-900 uppercase tracking-wider mb-0.5">
+                  {card.title}
+                </h4>
+                <p className="text-[13px] text-gray-500 font-medium leading-snug">
+                  {card.desc}
+                </p>
               </div>
             </div>
           ))}

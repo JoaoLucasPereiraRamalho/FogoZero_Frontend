@@ -2,7 +2,6 @@ import { Header } from "../../components/Header";
 import { HeroCTA } from "../../components/Report/HeroCTA";
 import { ReportForm } from "../../components/Report/ReportForm";
 import { EmergencyGuidelines } from "../../components/Report/EmergencyGuidelines";
-import { HeatMap } from "../../components/Report/HeatMap";
 
 export function ReportePage() {
   return (
@@ -36,8 +35,6 @@ export function ReportePage() {
             <EmergencyGuidelines />
           </div>
         </div>
-
-        <HeatMap />
       </main>
     </div>
   );
