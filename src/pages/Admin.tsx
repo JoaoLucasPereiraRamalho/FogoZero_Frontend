@@ -6,6 +6,7 @@ import { noticiaService } from "../services/noticia";
 import type { Noticia } from "../types/noticia";
 import { Header } from "../components/Header";
 import { AdminUserList } from "../components/Admin/AdminUserList";
+import { Footer } from "../components/Footer/Footer";
 
 export default function AdminPage() {
   const [noticias, setNoticias] = useState<Noticia[]>([]);
@@ -94,6 +95,7 @@ export default function AdminPage() {
           )}
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

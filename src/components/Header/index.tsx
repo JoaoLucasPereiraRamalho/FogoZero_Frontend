@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { BotaoPerfil } from "./BotaoPerfil";
 
 export function Header() {
   // Esse hook descobre qual é a URL atual (ex: '/' ou '/reporte')
@@ -8,8 +9,6 @@ export function Header() {
     { name: "Portal", path: "/" },
     { name: "Dashboard", path: "/dashboard" },
     { name: "Reporte", path: "/reporte" },
-    { name: "Login", path: "/login" },
-    { name: "cadastro", path: "/cadastro" },
   ];
 
   return (
@@ -45,9 +44,9 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <button className="px-5 py-2 bg-white text-fogo-red text-sm font-bold rounded-lg shadow-sm hover:bg-gray-100 transition-colors">
-            <Link to="/login">Entrar</Link>
-          </button>
+          <div className="auth-area">
+            <BotaoPerfil />
+          </div>
           <button className="hidden sm:block px-5 py-2 bg-white text-fogo-red text-sm font-bold rounded-lg shadow-sm hover:bg-gray-100 transition-colors">
             <Link to="/cadastro">Cadastrar</Link>
           </button>

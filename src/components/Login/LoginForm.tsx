@@ -19,17 +19,24 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      // Usando a função login do seu authService
       const data = await authService.login(email, senha);
 
-      // Salva no LocalStorage conforme planejado
+      // 1. Salva no LocalStorage
       localStorage.setItem("@FogoZero:token", data.token);
       localStorage.setItem("@FogoZero:user", JSON.stringify(data.usuario));
 
-      // Redireciona para o dashboard
-      navigate("/dashboard");
+      // 2. Extrai o tipo com segurança (usa o ? para não travar se data.usuario for undefined)
+      const tipoUsuario = data.usuario?.tipo?.toLowerCase();
+
+      // 3. Redirecionamento
+      if (tipoUsuario === "admin") {
+        navigate("/admin");
+      } else {
+        // Qualquer coisa que não seja 'admin' (incluindo 'user' ou erro) vai para o perfil
+        navigate("/perfilusuario");
+      }
     } catch (err: any) {
-      // Exibe a mensagem de erro que vem do backend
+      // O seu service deve retornar a mensagem de erro da API
       setErro(err || "Falha na autenticação");
     } finally {
       setLoading(false);

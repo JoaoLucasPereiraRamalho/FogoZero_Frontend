@@ -20,10 +20,9 @@ export function HeroCTA() {
 
         {/* Coluna 2: Conteúdo */}
         <div className="flex flex-col justify-center items-start text-left">
-          <h1 className="text-3xl sm:text-5xl font-black text-gray-900 mb-6 leading-tight uppercase">
-            Viu um incêndio ou possível
-            <br className="hidden lg:block" /> foco de queimada?
-          </h1>
+          <h3 className="text-3xl sm:text-5xl font-black text-gray-900 mb-6 leading-tight uppercase">
+            Viu um incêndio ou possível foco de queimada?
+          </h3>
 
           <p className="text-gray-900 text-base sm:text-xl mb-8 leading-relaxed font-medium">
             Em situações de risco, o primeiro passo é acionar as autoridades.

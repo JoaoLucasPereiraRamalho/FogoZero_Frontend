@@ -2,6 +2,7 @@ import { Header } from "../../components/Header";
 import { HeroCTA } from "../../components/Report/HeroCTA";
 import { ReportForm } from "../../components/Report/ReportForm";
 import { EmergencyGuidelines } from "../../components/Report/EmergencyGuidelines";
+import { Footer } from "../../components/Footer/Footer";
 
 export function ReportePage() {
   return (
@@ -36,6 +37,7 @@ export function ReportePage() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

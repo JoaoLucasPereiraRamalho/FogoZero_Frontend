@@ -1,5 +1,6 @@
 import { LoginForm } from "../components/Login/LoginForm";
 import { Header } from "../components/Header";
+import { Footer } from "../components/Footer/Footer";
 
 export function LoginPage() {
   return (
@@ -23,7 +24,7 @@ export function LoginPage() {
           </div>
         </div>
       </main>
-
+      <Footer />
       {/* Opcional: Adicionar seu Footer aqui */}
     </div>
   );

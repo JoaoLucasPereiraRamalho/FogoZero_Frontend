@@ -1,4 +1,5 @@
 import { RegisterForm } from "../components/Cadastro/RegisterForm";
+import { Footer } from "../components/Footer/Footer";
 import { Header } from "../components/Header";
 
 export function Cadastro() {
@@ -24,7 +25,7 @@ export function Cadastro() {
           </div>
         </div>
       </main>
-
+      <Footer />
       {/* Aqui entraria o seu componente de Footer */}
     </div>
   );
