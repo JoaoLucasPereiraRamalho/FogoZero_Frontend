@@ -22,6 +22,21 @@ interface Municipio {
   mes_mais_afetado?: string;
 }
 
+const BIOMAS_MAP: Record<string, number> = {
+  Município: 1,
+  Amazônia: 2,
+  Caatinga: 3,
+  Cerrado: 4,
+  "Mata Atlântica": 5,
+  Pampa: 6,
+  Pantanal: 7,
+};
+
+const getBiomaId = (nomeBioma?: string) => {
+  if (!nomeBioma) return 1;
+  return BIOMAS_MAP[nomeBioma] || 1;
+};
+
 export function DashboardPage() {
   const [municipios, setMunicipios] = useState<Municipio[]>([]);
   const [municipioAtivo, setMunicipioAtivo] = useState<Municipio | null>(null);
@@ -134,12 +149,12 @@ export function DashboardPage() {
                 </div>
               </div>
 
-              <EvolucaoMensalBioma id={biomaFoco || "1"} ano={anoFiltro} />
+              <EvolucaoMensalBioma id={getBiomaId(biomaFoco)} ano={anoFiltro} />
             </div>
 
             {/* Estatísticas */}
             <div className="lg:col-span-1">
-              <EstatisticasBioma id={biomaFoco || "1"} ano={anoFiltro} />
+              <EstatisticasBioma id={getBiomaId(biomaFoco)} ano={anoFiltro} />
             </div>
           </section>
         </div>

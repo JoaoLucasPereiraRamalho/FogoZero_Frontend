@@ -19,8 +19,13 @@ interface DadosMes {
 }
 
 interface BiomaLista {
-  bioma: string; // Nome que vem do endpoint de distribuição
-  total_focos: number;
+  id: number;
+  descricao: string;
+  total_regioes: number;
+}
+
+interface DistribuicaoResponse {
+  biomas: BiomaLista[];
 }
 
 interface EvolucaoResponse {
@@ -30,13 +35,21 @@ interface EvolucaoResponse {
 }
 
 interface Props {
+  id: string | number;
   ano: number;
 }
 
-export function EvolucaoMensalBioma({ ano }: Props) {
+const getBiomaId = (id: string | number, biomas: BiomaLista[]) => {
+  if (typeof id === "number") return id;
+  if (!isNaN(Number(id))) return Number(id);
+  const encontrado = biomas.find((bioma) => bioma.descricao === id);
+  return encontrado?.id || biomas[0]?.id || 1;
+};
+
+export function EvolucaoMensalBioma({ id, ano }: Props) {
   // Estados
-  const [biomasDisponiveis, setBiomasDisponiveis] = useState<string[]>([]);
-  const [biomaAtivo, setBiomaAtivo] = useState("");
+  const [biomasDisponiveis, setBiomasDisponiveis] = useState<BiomaLista[]>([]);
+  const [biomaAtivoId, setBiomaAtivoId] = useState<number | null>(null);
   const [dadosGrafico, setDadosGrafico] = useState<
     { name: string; focos: number }[]
   >([]);
@@ -51,13 +64,13 @@ export function EvolucaoMensalBioma({ ano }: Props) {
       try {
         setLoading(true);
         // Usamos o endpoint de distribuição para saber quais biomas existem
-        const distribuicao: BiomaLista[] =
+        const distribuicao: DistribuicaoResponse =
           await biomaService.getDistribuicao(ano);
 
-        if (distribuicao && distribuicao.length > 0) {
-          const nomes = distribuicao.map((d) => d.bioma);
-          setBiomasDisponiveis(nomes);
-          setBiomaAtivo(nomes[0]); // Define o primeiro bioma como padrão
+        const listaBiomas = distribuicao?.biomas || [];
+        if (listaBiomas.length > 0) {
+          setBiomasDisponiveis(listaBiomas);
+          setBiomaAtivoId(getBiomaId(id, listaBiomas));
         }
       } catch (err) {
         console.error("Erro ao carregar lista de biomas:", err);
@@ -67,17 +80,17 @@ export function EvolucaoMensalBioma({ ano }: Props) {
       }
     }
     carregarListaBiomas();
-  }, [ano]);
+  }, [ano, id]);
 
   // 2. REAÇÃO À ESCOLHA: Busca a evolução sempre que o biomaAtivo mudar
   useEffect(() => {
     async function carregarEvolucao() {
-      if (!biomaAtivo) return;
+      if (!biomaAtivoId) return;
 
       try {
         setLoadingGrafico(true);
         const resposta: EvolucaoResponse = await biomaService.getEvolucaoMensal(
-          1,
+          biomaAtivoId,
           ano,
         );
 
@@ -96,7 +109,7 @@ export function EvolucaoMensalBioma({ ano }: Props) {
     }
 
     carregarEvolucao();
-  }, [biomaAtivo, ano]);
+  }, [biomaAtivoId, ano]);
 
   if (loading)
     return (
@@ -122,13 +135,13 @@ export function EvolucaoMensalBioma({ ano }: Props) {
         {/* Select populado pela API */}
         <div className="relative min-w-[220px]">
           <select
-            value={biomaAtivo}
-            onChange={(e) => setBiomaAtivo(e.target.value)}
+            value={biomaAtivoId ?? ""}
+            onChange={(e) => setBiomaAtivoId(Number(e.target.value))}
             className="w-full appearance-none bg-gray-50 border border-gray-100 px-4 py-3 rounded-xl font-bold text-xs outline-none focus:ring-2 focus:ring-red-100 transition-all cursor-pointer pr-10"
           >
-            {biomasDisponiveis.map((nome) => (
-              <option key={nome} value={nome}>
-                {nome}
+            {biomasDisponiveis.map((bioma) => (
+              <option key={bioma.id} value={bioma.id}>
+                {bioma.descricao}
               </option>
             ))}
           </select>

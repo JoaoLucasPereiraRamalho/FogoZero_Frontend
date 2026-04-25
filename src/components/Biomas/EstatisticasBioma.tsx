@@ -35,12 +35,13 @@ interface Props {
 // --- Dicionário de Conversão (De-Para) ---
 // IMPORTANTE: Atualize estes números com os IDs reais da sua tabela de biomas no banco!
 const BIOMAS_MAP: Record<string, number> = {
-  Amazônia: 1,
-  Caatinga: 2,
-  Cerrado: 3,
-  "Mata Atlântica": 4,
-  Pampa: 5,
-  Pantanal: 6,
+  Município: 1,
+  Amazônia: 2,
+  Caatinga: 3,
+  Cerrado: 4,
+  "Mata Atlântica": 5,
+  Pampa: 6,
+  Pantanal: 7,
 };
 
 export function EstatisticasBioma({ id, ano }: Props) {
