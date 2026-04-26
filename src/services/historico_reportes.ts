@@ -1,9 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
 });
-
 
 export const listarReportesPorUsuario = async (usuarioId: number) => {
   try {
@@ -11,7 +10,9 @@ export const listarReportesPorUsuario = async (usuarioId: number) => {
     const { data } = await api.get(`/reportes/usuario/${usuarioId}`);
     return data;
   } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao carregar histórico de reportes";
+    throw (
+      error.response?.data?.mensagem || "Erro ao carregar histórico de reportes"
+    );
   }
 };
 
@@ -21,6 +22,8 @@ export const buscarReportePorId = async (id: number) => {
     const { data } = await api.get(`/reportes/${id}`);
     return data;
   } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao carregar detalhes do reporte";
+    throw (
+      error.response?.data?.mensagem || "Erro ao carregar detalhes do reporte"
+    );
   }
 };

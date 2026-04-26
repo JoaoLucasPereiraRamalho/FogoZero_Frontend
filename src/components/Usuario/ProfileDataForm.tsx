@@ -73,14 +73,14 @@ export function ProfileDataForm() {
 
   if (loading) {
     return (
-      <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm h-full flex items-center justify-center">
+      <div className="bg-white p-8 rounded-4xl border border-gray-100 shadow-sm h-full flex items-center justify-center">
         <Loader2 className="animate-spin text-[#bd1522]" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm h-full">
+    <div className="bg-white p-8 rounded-4xl border border-gray-100 shadow-sm h-full">
       <h3 className="text-lg font-bold text-black mb-1">Seus dados</h3>
       <p className="text-[11px] text-gray-500 mb-6 leading-tight">
         Atualize seus dados para manter seu cadastro completo e garantir o

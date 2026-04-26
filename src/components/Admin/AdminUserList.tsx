@@ -83,14 +83,14 @@ export function AdminUserList() {
 
   if (loading) {
     return (
-      <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm h-64 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-4xl border border-gray-100 shadow-sm h-64 flex items-center justify-center">
         <Loader2 className="animate-spin text-[#bd1522]" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
+    <div className="bg-white p-8 rounded-4xl border border-gray-100 shadow-sm overflow-hidden">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
           <h3 className="text-lg font-bold text-black flex items-center gap-2">

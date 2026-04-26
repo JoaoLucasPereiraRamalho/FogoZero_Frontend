@@ -89,7 +89,7 @@ export function CityAlertsManager() {
   );
 
   return (
-    <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm h-full">
+    <div className="bg-white p-8 rounded-4xl border border-gray-100 shadow-sm h-full">
       <h3 className="text-lg font-bold text-black mb-1">
         Alertas por município
       </h3>

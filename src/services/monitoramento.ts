@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
 });
 
 export interface MonitoramentoDTO {
@@ -17,8 +17,8 @@ export const registrarMonitoramento = async (dados: MonitoramentoDTO) => {
   try {
     const { data } = await api.post("/monitoramentos", dados, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return data;
   } catch (error: any) {
@@ -27,13 +27,18 @@ export const registrarMonitoramento = async (dados: MonitoramentoDTO) => {
 };
 
 const getHeaders = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem("@FogoZero:token")}` }
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("@FogoZero:token")}`,
+  },
 });
 
 export const listarMonitoramentos = async (usuarioId: number) => {
   try {
     // Passando os headers manualmente como segundo/terceiro parâmetro
-    const { data } = await api.get(`/monitoramentos?usuarioId=${usuarioId}`, getHeaders());
+    const { data } = await api.get(
+      `/monitoramentos?usuarioId=${usuarioId}`,
+      getHeaders(),
+    );
     return data;
   } catch (error: any) {
     throw error.response?.data?.mensagem || "Erro ao carregar lista";
@@ -48,4 +53,3 @@ export const deletarMonitoramento = async (id: number) => {
     throw error.response?.data?.mensagem || "Erro ao deletar";
   }
 };
-

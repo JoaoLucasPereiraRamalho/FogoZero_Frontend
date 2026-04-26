@@ -31,7 +31,7 @@ export function Carrossel() {
           style={{ transform: `translateX(-${current * 100}%)` }}
         >
           {SLIDES.map((slide) => (
-            <div key={slide.id} className="min-w-full relative h-[550px]">
+            <div key={slide.id} className="min-w-full relative h-137.5">
               {/* Imagem de Fundo */}
               <img
                 src={slide.image}

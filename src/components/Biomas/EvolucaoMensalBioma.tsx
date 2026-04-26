@@ -124,7 +124,7 @@ export function EvolucaoMensalBioma({ id, ano, onBiomaChange }: Props) {
 
   if (loading)
     return (
-      <div className="h-[450px] flex items-center justify-center bg-white rounded-[2.5rem] border border-gray-100">
+      <div className="h-112.5 flex items-center justify-center bg-white rounded-[2.5rem] border border-gray-100">
         <Loader2 className="animate-spin text-[#bd1522]" size={32} />
       </div>
     );
@@ -144,7 +144,7 @@ export function EvolucaoMensalBioma({ id, ano, onBiomaChange }: Props) {
         </div>
 
         {/* Select populado pela API */}
-        <div className="relative min-w-[220px]">
+        <div className="relative min-w-55">
           <select
             value={biomaAtivoId ?? ""}
             onChange={(e) => {
@@ -176,7 +176,7 @@ export function EvolucaoMensalBioma({ id, ano, onBiomaChange }: Props) {
       </div>
 
       {/* Área do Gráfico */}
-      <div className="h-[350px] w-full relative">
+      <div className="h-87.5 w-full relative">
         {loadingGrafico && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/40 z-10 backdrop-blur-[1px]">
             <Loader2 className="animate-spin text-[#bd1522]" size={32} />
