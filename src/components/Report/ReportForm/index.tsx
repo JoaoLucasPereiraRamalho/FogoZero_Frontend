@@ -2,7 +2,6 @@ import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 // Importando as duas funções de serviço
 import { criarReporte, criarPrimeiroReporte } from "../../../services/reporte";
-import { getCoordsByRegiao } from "../../../utils/geo";
 import { isUserLogged } from "../../../utils/auth";
 
 export function ReportForm() {
@@ -27,7 +26,8 @@ export function ReportForm() {
     if (!value) return false;
     try {
       const parsed = new URL(value);
-      const isHttp = parsed.protocol === "http:" || parsed.protocol === "https:";
+      const isHttp =
+        parsed.protocol === "http:" || parsed.protocol === "https:";
       const hasImageExt = /\.(png|jpe?g|webp|gif|bmp|tiff|svg)(\?.*)?$/i.test(
         parsed.pathname + parsed.search,
       );
@@ -42,11 +42,12 @@ export function ReportForm() {
     setLoading(true);
 
     try {
-      const { lat, lng } = getCoordsByRegiao(idRegiao);
       const tituloFinal = tipoReporte;
       const assuntoFinal = descricao;
-      const latitudeFinal = Number.isFinite(lat) ? lat : -21.0;
-      const longitudeFinal = Number.isFinite(lng) ? lng : -45.0;
+      // Coordenadas placeholder — serão substituídas pelas coords reais do
+      // município escolhido na Fase 5 (select dinâmico).
+      const latitudeFinal = -21.0;
+      const longitudeFinal = -45.0;
       const imagemUrlFinal = imagemUrl.trim();
 
       if (!isValidImageUrl(imagemUrlFinal)) {
@@ -105,7 +106,9 @@ export function ReportForm() {
       setImagemUrl("");
       setTipoReporte("");
     } catch (error: unknown) {
-      alert(`Erro no envio: ${error instanceof Error ? error.message : String(error)}`);
+      alert(
+        `Erro no envio: ${error instanceof Error ? error.message : String(error)}`,
+      );
     } finally {
       setLoading(false);
     }

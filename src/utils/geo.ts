@@ -1,9 +1,23 @@
-export const getCoordsByRegiao = (idRegiao: number) => {
-  const coords: Record<number, { lat: number; lng: number }> = {
-    1: { lat: -19.9167, lng: -43.9345 }, // Belo Horizonte
-    2: { lat: -21.2436, lng: -45.0014 }, // Lavras
-    3: { lat: -18.9186, lng: -48.2772 }, // Uberlândia
-  };
+/**
+ * Mapeia o nome do bioma para o `id_regiao` correspondente no backend.
+ *
+ * Tabela `Regiao` (id 1-9):
+ *  - Cerrado:        Serra do Gandarela (1), Serra do Cipó (2),
+ *                    Serra da Canastra (3), Grande Sertão Veredas (4)
+ *  - Mata Atlântica: Serra da Mantiqueira (5), Parque Estadual do Ibitipoca (6),
+ *                    APA Sul RMBH (7)
+ *  - Caatinga:       Parque Estadual da Lapa Grande (8),
+ *                    APA Carste de Lagoa Santa (9)
+ *
+ * Para fins de cadastro/reporte, usamos a primeira região representativa
+ * de cada bioma. O fallback (1) cobre municípios sem bioma definido.
+ */
+export function getBiomaRegiao(bioma: string | null | undefined): number {
+  const normalizado = (bioma || "").trim().toLowerCase();
 
-  return coords[idRegiao] || { lat: -21.0, lng: -45.0 }; // Fallback caso não ache
-};
+  if (normalizado.includes("mata")) return 5; // Mata Atlântica
+  if (normalizado.includes("caatinga")) return 8; // Caatinga
+  if (normalizado.includes("cerrado")) return 1; // Cerrado
+
+  return 1;
+}
