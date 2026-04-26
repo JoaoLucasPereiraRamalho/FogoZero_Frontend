@@ -10,7 +10,7 @@ export function AdminNewsCard({ noticia, onAction }: AdminNewsCardProps) {
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
       <div className="relative h-44 bg-gray-200">
         <img
-          src={noticia.imagem_capa || "/placeholder-news.jpg"}
+          src={"/noticia2.jpeg"}
           className="w-full h-full object-cover"
           alt={noticia.titulo}
         />
@@ -23,9 +23,14 @@ export function AdminNewsCard({ noticia, onAction }: AdminNewsCardProps) {
         <h4 className="font-bold text-black text-sm leading-snug mb-2 line-clamp-2">
           {noticia.titulo}
         </h4>
-        <p className="text-[12px] text-gray-500 leading-relaxed mb-4 line-clamp-3">
-          {noticia.conteudo}
-        </p>
+        <a
+          href={noticia.fonte_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 text-[#bd1522] text-xs font-bold hover:underline"
+        >
+          Ler matéria completa →
+        </a>
 
         <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
           <div className="flex gap-2">

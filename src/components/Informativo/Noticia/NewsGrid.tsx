@@ -56,10 +56,7 @@ export function NewsGrid() {
               {/* Imagem Dinâmica */}
               <div className="relative h-48 bg-gray-100">
                 <img
-                  src={
-                    item.imagem_capa ||
-                    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=500&auto=format&fit=crop"
-                  }
+                  src={"/noticia.jpeg"}
                   alt={item.titulo}
                   className="w-full h-full object-cover"
                 />
@@ -73,9 +70,6 @@ export function NewsGrid() {
                 <h4 className="font-bold text-black text-[15px] leading-snug mb-2 line-clamp-2">
                   {item.titulo}
                 </h4>
-                <p className="text-[13px] text-gray-600 leading-relaxed mb-6 grow line-clamp-3">
-                  {item.conteudo}
-                </p>
 
                 {/* Rodapé do Card */}
                 <div className="flex items-center justify-between mt-auto">
