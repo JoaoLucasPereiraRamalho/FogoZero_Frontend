@@ -7,7 +7,7 @@ export function BotaoPerfil() {
   const userData = localStorage.getItem("@FogoZero:user");
   const usuario = userData ? JSON.parse(userData) : null;
   const isLogged = Boolean(token && usuario);
-  const isAdmin = isLogged && usuario.tipo?.toLowerCase() === "admin";
+  const isAdmin = isLogged && usuario.tipo?.toLowerCase() === "administrador";
 
   function handleLogout() {
     localStorage.removeItem("@FogoZero:token");

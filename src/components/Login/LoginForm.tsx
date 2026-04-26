@@ -31,7 +31,7 @@ export function LoginForm() {
       const tipoUsuario = data.usuario?.tipo?.toLowerCase();
 
       // 3. Redirecionamento
-      if (tipoUsuario === "admin") {
+      if (tipoUsuario === "administrador") {
         navigate("/admin");
       } else {
         // Qualquer coisa que não seja 'admin' (incluindo 'user' ou erro) vai para o perfil
