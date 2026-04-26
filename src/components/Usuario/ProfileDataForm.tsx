@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { User, Mail, MapPin, Loader2 } from "lucide-react";
 import { InputGroup } from "../Cadastro/InputGroup";
 import { buscarPerfil, atualizarPerfil } from "../../services/crud_usuario";
+import type { UserUpdateData } from "../../services/crud_usuario";
 import { getLoggedUser } from "../../utils/auth";
 
 export function ProfileDataForm() {
@@ -48,7 +49,7 @@ export function ProfileDataForm() {
     setUpdating(true);
 
     try {
-      const payload: any = {
+      const payload: UserUpdateData = {
         nome: formData.nome,
         email: formData.email,
       };
@@ -56,7 +57,7 @@ export function ProfileDataForm() {
       // Se o usuário digitou uma nova senha, incluímos no patch
       if (formData.nova_senha) {
         payload.senha = formData.nova_senha;
-        payload.senha_atual = formData.senha_atual; // Muitos backends pedem a atual para validar a troca
+        payload.senha_atual = formData.senha_atual;
       }
 
       await atualizarPerfil(user.id, payload);
@@ -64,8 +65,8 @@ export function ProfileDataForm() {
 
       // Limpa campos de senha após sucesso
       setFormData((prev) => ({ ...prev, senha_atual: "", nova_senha: "" }));
-    } catch (err: any) {
-      alert(err);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : String(err));
     } finally {
       setUpdating(false);
     }
@@ -92,7 +93,7 @@ export function ProfileDataForm() {
           label="Nome"
           placeholder="Nome completo"
           value={formData.nome}
-          onChange={(e: any) =>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setFormData({ ...formData, nome: e.target.value })
           }
           icon={<User size={16} />}
@@ -101,7 +102,7 @@ export function ProfileDataForm() {
           label="Email"
           placeholder="Email de acesso"
           value={formData.email}
-          onChange={(e: any) =>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setFormData({ ...formData, email: e.target.value })
           }
           icon={<Mail size={16} />}

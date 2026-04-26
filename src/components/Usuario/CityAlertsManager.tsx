@@ -7,9 +7,10 @@ import {
 import { municipioService } from "../../services/municipio";
 import { getLoggedUser } from "../../utils/auth";
 import { Loader2, MapPin } from "lucide-react";
+import type { Monitoramento, MunicipioMG } from "../../types/models";
 
 export function CityAlertsManager() {
-  const [monitoramentos, setMonitoramentos] = useState<any[]>([]);
+  const [monitoramentos, setMonitoramentos] = useState<Monitoramento[]>([]);
   const [municipiosDisponiveis, setMunicipiosDisponiveis] = useState<string[]>(
     [],
   );
@@ -37,11 +38,11 @@ export function CityAlertsManager() {
       setMonitoramentos(dados);
 
       const nomesMunicipios = (municipios || [])
-        .map((m: any) => m.municipio)
+        .map((m: MunicipioMG) => m.municipio)
         .filter(Boolean)
         .sort((a: string, b: string) => a.localeCompare(b));
       setMunicipiosDisponiveis(nomesMunicipios);
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
     } finally {
       setFetching(false);
@@ -61,9 +62,9 @@ export function CityAlertsManager() {
       });
 
       setCidadeSelecionada("");
-      await carregarDados(); // Recarrega lista do banco
-    } catch (err: any) {
-      alert(err);
+      await carregarDados();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
@@ -74,10 +75,9 @@ export function CityAlertsManager() {
 
     try {
       await deletarMonitoramento(id);
-      // Filtra localmente para resposta instantânea na UI
       setMonitoramentos((prev) => prev.filter((m) => m.id !== id));
-    } catch (err: any) {
-      alert(err);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : String(err));
     }
   };
 

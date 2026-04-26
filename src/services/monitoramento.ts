@@ -1,4 +1,5 @@
 import axios from "axios";
+import { extractApiError } from "../utils/errors";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
@@ -21,8 +22,8 @@ export const registrarMonitoramento = async (dados: MonitoramentoDTO) => {
       },
     });
     return data;
-  } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao registrar monitoramento";
+  } catch (error) {
+    throw extractApiError(error, "Erro ao registrar monitoramento");
   }
 };
 
@@ -39,15 +40,15 @@ export const listarMonitoramentos = async (usuarioId: number) => {
       getHeaders(),
     );
     return data;
-  } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao carregar lista";
+  } catch (error) {
+    throw extractApiError(error, "Erro ao carregar lista");
   }
 };
 
 export const deletarMonitoramento = async (id: number) => {
   try {
     await api.delete(`/monitoramentos/${id}`, getHeaders());
-  } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao deletar";
+  } catch (error) {
+    throw extractApiError(error, "Erro ao deletar");
   }
 };

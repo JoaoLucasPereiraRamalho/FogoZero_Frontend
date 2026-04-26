@@ -12,9 +12,10 @@ import {
   listarTodosUsuarios,
   excluirUsuarioPorId,
 } from "../../services/crud_usuario";
+import type { UsuarioAdmin } from "../../types/models";
 
 export function AdminUserList() {
-  const [usuarios, setUsuarios] = useState<any[]>([]); // Sempre inicia como array vazio
+  const [usuarios, setUsuarios] = useState<UsuarioAdmin[]>([]);
   const [loading, setLoading] = useState(true);
   const [busca, setBusca] = useState("");
   const [deletandoId, setDeletandoId] = useState<number | null>(null);
@@ -49,13 +50,13 @@ export function AdminUserList() {
         u.email?.toLowerCase().includes(busca.toLowerCase()),
     ) || [];
 
-  const getUsuarioId = (usuario: any): number | null => {
+  const getUsuarioId = (usuario: UsuarioAdmin): number | null => {
     const rawId = usuario?.id ?? usuario?.id_usuario ?? usuario?.usuario_id;
     const idNumerico = Number(rawId);
     return Number.isFinite(idNumerico) ? idNumerico : null;
   };
 
-  const handleExcluirUsuario = async (usuario: any) => {
+  const handleExcluirUsuario = async (usuario: UsuarioAdmin) => {
     const usuarioId = getUsuarioId(usuario);
     if (!usuarioId) {
       alert("Não foi possível identificar o ID deste usuário.");
@@ -70,7 +71,7 @@ export function AdminUserList() {
     try {
       setDeletandoId(usuarioId);
       await excluirUsuarioPorId(usuarioId);
-      setUsuarios((prev: any[]) =>
+      setUsuarios((prev) =>
         prev.filter((u) => getUsuarioId(u) !== usuarioId),
       );
     } catch (err) {
@@ -132,7 +133,7 @@ export function AdminUserList() {
           </thead>
           <tbody className="divide-y divide-gray-50">
             {usuariosFiltrados.length > 0 ? (
-              usuariosFiltrados.map((u: any) => (
+              usuariosFiltrados.map((u) => (
                 <tr
                   key={getUsuarioId(u) ?? `${u.email}-${u.nome}`}
                   className="hover:bg-gray-50/50 transition-colors group"

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { listarReportesPorUsuario } from "../../services/reporte";
 import { getLoggedUser } from "../../utils/auth";
 import { Loader2 } from "lucide-react";
+import type { ReporteHistorico } from "../../types/models";
 
 interface ReporteItem {
   id: number;
@@ -28,8 +29,8 @@ export function ReportsTable() {
     }
   }, [userId]);
 
-  const normalizarReporte = (item: any): ReporteItem => {
-    const id = Number(item?.id ?? item?.id_reporte ?? item?.reporte_id ?? 0);
+  const normalizarReporte = (item: ReporteHistorico): ReporteItem => {
+    const id = Number(item?.id ?? 0);
     const tipo = item?.tipo || item?.titulo || "Foco de Incêndio";
     const data = item?.createdAt || item?.created_at || item?.data || "";
     return { id, tipo, data };
@@ -41,7 +42,9 @@ export function ReportsTable() {
     try {
       setLoading(true);
       const dados = await listarReportesPorUsuario(userId);
-      const listaNormalizada = (dados as any[]).map(normalizarReporte);
+      const listaNormalizada = (dados as ReporteHistorico[]).map(
+        normalizarReporte,
+      );
       setReportes(listaNormalizada);
     } catch (err) {
       console.error("Erro ao carregar reportes:", err);
@@ -58,7 +61,7 @@ export function ReportsTable() {
         pode acompanhar todos os registros que já enviou.
       </p>
 
-      <div className="bg-white rounded-[2rem] border border-gray-100 shadow-sm p-8">
+      <div className="bg-white rounded-4xl border border-gray-100 shadow-sm p-8">
         <div className="mb-6">
           <h4 className="font-bold text-gray-800">Reportes enviados</h4>
           <p className="text-[11px] text-gray-400">
@@ -83,17 +86,23 @@ export function ReportsTable() {
             <tbody className="text-[13px] text-gray-600">
               {reportes.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="py-8 text-center text-gray-400 italic">
+                  <td
+                    colSpan={4}
+                    className="py-8 text-center text-gray-400 italic"
+                  >
                     Nenhum reporte encontrado.
                   </td>
                 </tr>
               ) : (
                 reportes.map((r) => (
-                  <tr key={r.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
-                    <td className="py-4 font-medium">#{String(r.id).padStart(2, '0')}</td>
-                    <td className="py-4">
-                      {r.tipo}
+                  <tr
+                    key={r.id}
+                    className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="py-4 font-medium">
+                      #{String(r.id).padStart(2, "0")}
                     </td>
+                    <td className="py-4">{r.tipo}</td>
                     <td className="py-4">
                       {r.data
                         ? new Date(r.data).toLocaleDateString("pt-BR")

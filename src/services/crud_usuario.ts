@@ -1,4 +1,5 @@
 import axios from "axios";
+import { extractApiError } from "../utils/errors";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
@@ -27,8 +28,8 @@ export const buscarPerfil = async (id: number) => {
   try {
     const { data } = await api.get(`/usuarios/${id}`, getAuthHeaders());
     return data.usuario;
-  } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao buscar dados do perfil";
+  } catch (error) {
+    throw extractApiError(error, "Erro ao buscar dados do perfil");
   }
 };
 
@@ -41,8 +42,8 @@ export const atualizarPerfil = async (id: number, dados: UserUpdateData) => {
       getAuthHeaders(),
     );
     return data;
-  } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao atualizar perfil";
+  } catch (error) {
+    throw extractApiError(error, "Erro ao atualizar perfil");
   }
 };
 
@@ -50,8 +51,8 @@ export const atualizarPerfil = async (id: number, dados: UserUpdateData) => {
 export const excluirConta = async (id: number) => {
   try {
     await api.delete(`/usuarios/${id}`, getAuthHeaders());
-  } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao excluir conta";
+  } catch (error) {
+    throw extractApiError(error, "Erro ao excluir conta");
   }
 };
 
@@ -59,8 +60,8 @@ export const excluirConta = async (id: number) => {
 export const excluirUsuarioPorId = async (id: number) => {
   try {
     await api.delete(`/usuarios/${id}`, getAuthHeaders());
-  } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao excluir usuário";
+  } catch (error) {
+    throw extractApiError(error, "Erro ao excluir usuário");
   }
 };
 
@@ -68,7 +69,7 @@ export const listarTodosUsuarios = async () => {
   try {
     const { data } = await api.get("/usuarios", getAuthHeaders());
     return data.data || data;
-  } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao listar usuários";
+  } catch (error) {
+    throw extractApiError(error, "Erro ao listar usuários");
   }
 };
