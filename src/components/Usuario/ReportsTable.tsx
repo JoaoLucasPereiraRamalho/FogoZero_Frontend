@@ -1,24 +1,48 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { listarReportesPorUsuario } from "../../services/reporte";
 import { getLoggedUser } from "../../utils/auth";
 import { Loader2 } from "lucide-react";
 
+interface ReporteItem {
+  id: number;
+  tipo: string;
+  data: string;
+}
+
 export function ReportsTable() {
-  const [reportes, setReportes] = useState<any[]>([]);
+  const [reportes, setReportes] = useState<ReporteItem[]>([]);
   const [loading, setLoading] = useState(true);
   const user = getLoggedUser();
+  const userId = useMemo(() => {
+    const rawId = user?.id ?? user?.id_usuario ?? user?.usuario_id;
+    const id = Number(rawId);
+    return Number.isFinite(id) ? id : null;
+  }, [user]);
 
   useEffect(() => {
-    if (user?.id) {
+    if (userId) {
       carregarReportes();
+    } else {
+      setLoading(false);
+      setReportes([]);
     }
-  }, [user?.id]);
+  }, [userId]);
+
+  const normalizarReporte = (item: any): ReporteItem => {
+    const id = Number(item?.id ?? item?.id_reporte ?? item?.reporte_id ?? 0);
+    const tipo = item?.tipo || item?.titulo || "Foco de Incêndio";
+    const data = item?.createdAt || item?.created_at || item?.data || "";
+    return { id, tipo, data };
+  };
 
   const carregarReportes = async () => {
+    if (!userId) return;
+
     try {
       setLoading(true);
-      const dados = await listarReportesPorUsuario(user.id);
-      setReportes(dados);
+      const dados = await listarReportesPorUsuario(userId);
+      const listaNormalizada = (dados as any[]).map(normalizarReporte);
+      setReportes(listaNormalizada);
     } catch (err) {
       console.error("Erro ao carregar reportes:", err);
     } finally {
@@ -68,11 +92,12 @@ export function ReportsTable() {
                   <tr key={r.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
                     <td className="py-4 font-medium">#{String(r.id).padStart(2, '0')}</td>
                     <td className="py-4">
-                      {/* Ajuste 'tipo' conforme o nome do campo no seu banco (ex: r.tipo ou r.natureza) */}
-                      {r.tipo || "Foco de Incêndio"}
+                      {r.tipo}
                     </td>
                     <td className="py-4">
-                      {new Date(r.createdAt).toLocaleDateString('pt-BR')}
+                      {r.data
+                        ? new Date(r.data).toLocaleDateString("pt-BR")
+                        : "-"}
                     </td>
                     <td className="py-4 text-right">
                       <button className="bg-[#bd1522] text-white px-4 py-1.5 rounded-lg text-[11px] font-bold hover:bg-red-800 transition-all">

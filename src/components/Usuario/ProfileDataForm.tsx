@@ -120,26 +120,6 @@ export function ProfileDataForm() {
           />
         </div>
 
-        <div className="pt-2 border-t border-gray-50 mt-4">
-          <p className="text-[10px] font-bold text-gray-400 mb-2 uppercase">Alterar senha (opcional)</p>
-          <InputGroup
-            label="Senha atual"
-            type="password"
-            placeholder="********"
-            value={formData.senha_atual}
-            onChange={(e: any) => setFormData({ ...formData, senha_atual: e.target.value })}
-            icon={<Lock size={16} />}
-          />
-          <InputGroup
-            label="Nova senha"
-            type="password"
-            placeholder="Criar nova senha"
-            value={formData.nova_senha}
-            onChange={(e: any) => setFormData({ ...formData, nova_senha: e.target.value })}
-            icon={<Lock size={16} />}
-          />
-        </div>
-
         <button 
           type="submit"
           disabled={updating}

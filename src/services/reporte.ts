@@ -70,10 +70,11 @@ export const listarReportesPorUsuario = async (
     const { data } = await api.get(`/reportes/usuario/${usuarioId}`);
 
     // Se o backend retornar a lista direto: data
-    // Se o backend retornar um objeto: data.reportes ou data.data
+    // Se o backend retornar um objeto: data.reportes, data.data ou data.dados
     if (Array.isArray(data)) return data;
     if (data && Array.isArray(data.reportes)) return data.reportes;
     if (data && Array.isArray(data.data)) return data.data;
+    if (data && Array.isArray(data.dados)) return data.dados;
 
     return []; // Retorna array vazio se não encontrar a lista
   } catch (error: unknown) {
