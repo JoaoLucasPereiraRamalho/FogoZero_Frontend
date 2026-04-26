@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 // Importando as duas funções de serviço
 import { criarReporte, criarPrimeiroReporte } from "../../../services/reporte";
@@ -22,13 +22,38 @@ export function ReportForm() {
   const [imagemUrl, setImagemUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const isValidImageUrl = (url: string) => {
+    const value = url.trim();
+    if (!value) return false;
+    try {
+      const parsed = new URL(value);
+      const isHttp = parsed.protocol === "http:" || parsed.protocol === "https:";
+      const hasImageExt = /\.(png|jpe?g|webp|gif|bmp|tiff|svg)(\?.*)?$/i.test(
+        parsed.pathname + parsed.search,
+      );
+      return isHttp && hasImageExt;
+    } catch {
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const { lat, lng } = getCoordsByRegiao(idRegiao);
-      const assuntoFinal = `${tipoReporte}: ${descricao}`;
+      const tituloFinal = tipoReporte;
+      const assuntoFinal = descricao;
+      const latitudeFinal = Number.isFinite(lat) ? lat : -21.0;
+      const longitudeFinal = Number.isFinite(lng) ? lng : -45.0;
+      const imagemUrlFinal = imagemUrl.trim();
+
+      if (!isValidImageUrl(imagemUrlFinal)) {
+        throw new Error(
+          "Informe uma URL de imagem válida (http/https com extensão .jpg, .png, .webp...).",
+        );
+      }
 
       if (!logado) {
         // CASO 1: SEM TOKEN -> Chamada para criarPrimeiroReporte (JSON Estruturado)
@@ -41,10 +66,11 @@ export function ReportForm() {
             id_regiao: idRegiao,
           },
           reporte: {
+            titulo: tituloFinal,
             assunto: assuntoFinal,
-            latitude: lat,
-            longitude: lng,
-            imagem_url: imagemUrl || "https://via.placeholder.com/400",
+            latitude: latitudeFinal,
+            longitude: longitudeFinal,
+            imagem_url: imagemUrlFinal,
           },
         };
 
@@ -65,10 +91,11 @@ export function ReportForm() {
         // CASO 2: COM TOKEN -> Chamada para criarReporte (JSON Simples)
         await criarReporte({
           id_regiao: idRegiao,
+          titulo: tituloFinal,
           assunto: assuntoFinal,
-          latitude: lat,
-          longitude: lng,
-          imagem_url: imagemUrl || "https://via.placeholder.com/400",
+          latitude: latitudeFinal,
+          longitude: longitudeFinal,
+          imagem_url: imagemUrlFinal,
         });
         alert("Reporte enviado com sucesso!");
       }
@@ -77,8 +104,8 @@ export function ReportForm() {
       setDescricao("");
       setImagemUrl("");
       setTipoReporte("");
-    } catch (error: any) {
-      alert("Erro no envio: " + error);
+    } catch (error: unknown) {
+      alert(`Erro no envio: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setLoading(false);
     }
@@ -199,8 +226,9 @@ export function ReportForm() {
             type="text"
             value={imagemUrl}
             onChange={(e) => setImagemUrl(e.target.value)}
-            placeholder="http://exemplo.com/foto.jpg"
+            placeholder="https://exemplo.com/foto.jpg"
             className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
+            required
           />
         </div>
 

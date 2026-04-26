@@ -6,13 +6,18 @@ import {
   Loader2,
   Search,
   MapPin,
+  Trash2,
 } from "lucide-react";
-import { listarTodosUsuarios } from "../../services/crud_usuario";
+import {
+  listarTodosUsuarios,
+  excluirUsuarioPorId,
+} from "../../services/crud_usuario";
 
 export function AdminUserList() {
   const [usuarios, setUsuarios] = useState([]); // Sempre inicia como array vazio
   const [loading, setLoading] = useState(true);
   const [busca, setBusca] = useState("");
+  const [deletandoId, setDeletandoId] = useState<number | null>(null);
 
   useEffect(() => {
     carregarUsuarios();
@@ -43,6 +48,38 @@ export function AdminUserList() {
         u.nome?.toLowerCase().includes(busca.toLowerCase()) ||
         u.email?.toLowerCase().includes(busca.toLowerCase()),
     ) || [];
+
+  const getUsuarioId = (usuario: any): number | null => {
+    const rawId = usuario?.id ?? usuario?.id_usuario ?? usuario?.usuario_id;
+    const idNumerico = Number(rawId);
+    return Number.isFinite(idNumerico) ? idNumerico : null;
+  };
+
+  const handleExcluirUsuario = async (usuario: any) => {
+    const usuarioId = getUsuarioId(usuario);
+    if (!usuarioId) {
+      alert("Não foi possível identificar o ID deste usuário.");
+      return;
+    }
+
+    const confirmado = window.confirm(
+      `Deseja realmente excluir o usuário "${usuario.nome}"?`,
+    );
+    if (!confirmado) return;
+
+    try {
+      setDeletandoId(usuarioId);
+      await excluirUsuarioPorId(usuarioId);
+      setUsuarios((prev: any[]) =>
+        prev.filter((u) => getUsuarioId(u) !== usuarioId),
+      );
+    } catch (err) {
+      console.error("Erro ao excluir usuário:", err);
+      alert(`Não foi possível excluir o usuário: ${String(err)}`);
+    } finally {
+      setDeletandoId(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -90,13 +127,14 @@ export function AdminUserList() {
               <th className="pb-3">Contato</th>
               <th className="pb-3">Região</th>
               <th className="pb-3 text-center">Status</th>
+              <th className="pb-3 text-center">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {usuariosFiltrados.length > 0 ? (
               usuariosFiltrados.map((u: any) => (
                 <tr
-                  key={u.id}
+                  key={getUsuarioId(u) ?? `${u.email}-${u.nome}`}
                   className="hover:bg-gray-50/50 transition-colors group"
                 >
                   <td className="py-4 pl-2">
@@ -132,12 +170,28 @@ export function AdminUserList() {
                       <ShieldCheck size={12} /> {u.tipo || "usuario"}
                     </div>
                   </td>
+                  <td className="py-4 text-center">
+                    <button
+                      type="button"
+                      onClick={() => handleExcluirUsuario(u)}
+                      disabled={deletandoId === getUsuarioId(u)}
+                      className="inline-flex items-center justify-center p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors disabled:opacity-50"
+                      title="Excluir usuário"
+                      aria-label={`Excluir usuário ${u.nome}`}
+                    >
+                      {deletandoId === getUsuarioId(u) ? (
+                        <Loader2 size={14} className="animate-spin" />
+                      ) : (
+                        <Trash2 size={14} />
+                      )}
+                    </button>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td
-                  colSpan={4}
+                  colSpan={5}
                   className="py-10 text-center text-gray-400 text-xs italic"
                 >
                   Nenhum usuário encontrado para esta busca.

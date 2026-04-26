@@ -10,7 +10,7 @@ export function ReportePage() {
       <Header />
       <HeroCTA />
 
-      <main className="max-w-6xl mx-auto px-4 py-12">
+      <main id="form-reporte" className="max-w-6xl mx-auto px-4 py-12">
         {/* Títulos fora do card */}
         <div className="mb-6">
           <h2 className="text-[2.5rem] font-extrabold text-black mb-1 tracking-tight">

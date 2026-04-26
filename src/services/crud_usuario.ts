@@ -1,5 +1,4 @@
 import axios from "axios";
-import type { LoginResponse } from "../types/auth";
 
 const api = axios.create({
   baseURL: "http://localhost:3000/api",
@@ -58,6 +57,15 @@ export const excluirConta = async (id: number) => {
     await api.delete(`/usuarios/${id}`, getAuthHeaders());
   } catch (error: any) {
     throw error.response?.data?.mensagem || "Erro ao excluir conta";
+  }
+};
+
+// Exclui um usuário por ID (uso administrativo)
+export const excluirUsuarioPorId = async (id: number) => {
+  try {
+    await api.delete(`/usuarios/${id}`, getAuthHeaders());
+  } catch (error: any) {
+    throw error.response?.data?.mensagem || "Erro ao excluir usuário";
   }
 };
 

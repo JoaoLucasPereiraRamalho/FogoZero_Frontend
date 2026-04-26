@@ -1,4 +1,16 @@
+import type { MouseEvent } from "react";
+
 export function HeroCTA() {
+  const portalEmergenciaUrl = "https://www.emergencia.mg.gov.br";
+
+  const handleContatoEmergencia = (e: MouseEvent<HTMLAnchorElement>) => {
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    if (isDesktop) {
+      e.preventDefault();
+      window.open(portalEmergenciaUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     // Adicionamos 'relative' e 'overflow-hidden' para conter a imagem
     <section className="relative overflow-hidden py-16 md:py-32 px-4 sm:px-6">
@@ -31,7 +43,10 @@ export function HeroCTA() {
           </p>
 
           <div className="flex flex-wrap items-center gap-4 mb-4">
-            <button className="flex items-center gap-2 px-8 py-3 border-2 border-[#bd1522] text-[#bd1522] font-black rounded-xl hover:bg-red-50 transition-all active:scale-95 shadow-sm">
+            <a
+              href="#form-reporte"
+              className="flex items-center gap-2 px-8 py-3 border-2 border-[#bd1522] text-[#bd1522] font-black rounded-xl hover:bg-red-50 transition-all active:scale-95 shadow-sm"
+            >
               <svg
                 width="18"
                 height="18"
@@ -43,9 +58,15 @@ export function HeroCTA() {
                 <circle cx="12" cy="12" r="10"></circle>
               </svg>
               FAZER REPORTE
-            </button>
+            </a>
 
-            <button className="flex items-center gap-2 px-8 py-3 border-2 border-[#bd1522] bg-[#bd1522] text-white font-black rounded-xl hover:bg-red-800 transition-all active:scale-95 shadow-md">
+            <a
+              href="tel:193"
+              onClick={handleContatoEmergencia}
+              className="flex items-center gap-2 px-8 py-3 border-2 border-[#bd1522] bg-[#bd1522] text-white font-black rounded-xl hover:bg-red-800 transition-all active:scale-95 shadow-md"
+              aria-label="Ligar para os Bombeiros no 193"
+              title="Ligar 193 (mobile) ou abrir portal de emergência (desktop)"
+            >
               <svg
                 width="18"
                 height="18"
@@ -58,7 +79,7 @@ export function HeroCTA() {
                 <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
               </svg>
               LIGAR 193
-            </button>
+            </a>
           </div>
 
           <small className="text-xs font-bold text-gray-700 mt-2 uppercase tracking-wide">
