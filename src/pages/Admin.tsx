@@ -41,8 +41,6 @@ export default function AdminPage() {
 
       // Remove da lista visual após a ação para dar o feedback de "fila de trabalho"
       setNoticias((prev) => prev.filter((n) => n.id !== id));
-
-      console.log(`Notícia ${id} atualizada para ${novoStatus}`);
     } catch (error) {
       alert("Erro ao atualizar o status da notícia. Verifique o console.");
     }

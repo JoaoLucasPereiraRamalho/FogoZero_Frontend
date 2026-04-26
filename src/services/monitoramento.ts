@@ -12,7 +12,7 @@ export interface MonitoramentoDTO {
 }
 
 export const registrarMonitoramento = async (dados: MonitoramentoDTO) => {
-  const token = localStorage.getItem("@FogoZero:token"); // Pegue a chave exata que você usa
+  const token = localStorage.getItem("@FogoZero:token");
 
   try {
     const { data } = await api.post("/monitoramentos", dados, {
@@ -34,7 +34,6 @@ const getHeaders = () => ({
 
 export const listarMonitoramentos = async (usuarioId: number) => {
   try {
-    // Passando os headers manualmente como segundo/terceiro parâmetro
     const { data } = await api.get(
       `/monitoramentos?usuarioId=${usuarioId}`,
       getHeaders(),
@@ -47,7 +46,6 @@ export const listarMonitoramentos = async (usuarioId: number) => {
 
 export const deletarMonitoramento = async (id: number) => {
   try {
-    // No DELETE, os headers são o segundo parâmetro
     await api.delete(`/monitoramentos/${id}`, getHeaders());
   } catch (error: any) {
     throw error.response?.data?.mensagem || "Erro ao deletar";

@@ -26,9 +26,6 @@ export interface UserUpdateData {
 export const buscarPerfil = async (id: number) => {
   try {
     const { data } = await api.get(`/usuarios/${id}`, getAuthHeaders());
-
-    // Como seu backend retorna { usuario: { ... } },
-    // precisamos acessar a chave 'usuario'
     return data.usuario;
   } catch (error: any) {
     throw error.response?.data?.mensagem || "Erro ao buscar dados do perfil";
@@ -38,7 +35,6 @@ export const buscarPerfil = async (id: number) => {
 // Atualiza dados do perfil (PATCH /api/usuarios/:id)
 export const atualizarPerfil = async (id: number, dados: UserUpdateData) => {
   try {
-    // O terceiro parâmetro do PATCH é a configuração (headers)
     const { data } = await api.patch(
       `/usuarios/${id}`,
       dados,
@@ -53,7 +49,6 @@ export const atualizarPerfil = async (id: number, dados: UserUpdateData) => {
 // Exclui a própria conta (DELETE /api/usuarios/:id)
 export const excluirConta = async (id: number) => {
   try {
-    // O segundo parâmetro do DELETE é a configuração (headers)
     await api.delete(`/usuarios/${id}`, getAuthHeaders());
   } catch (error: any) {
     throw error.response?.data?.mensagem || "Erro ao excluir conta";
@@ -72,7 +67,6 @@ export const excluirUsuarioPorId = async (id: number) => {
 export const listarTodosUsuarios = async () => {
   try {
     const { data } = await api.get("/usuarios", getAuthHeaders());
-    // Se o backend usa buildPaginationResponse, os dados estão em data.data
     return data.data || data;
   } catch (error: any) {
     throw error.response?.data?.mensagem || "Erro ao listar usuários";

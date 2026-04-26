@@ -6,14 +6,9 @@ export const municipioService = {
       const response = await api.get("/municipios");
       const dadosBrutos = response.data;
 
-      // Log para você conferir no F12
-      console.log("🔍 API Respondendo:", dadosBrutos);
-
-      // Garantia: Se a API mandou um objeto com { dados: [...] }, pegamos o array.
-      // Se mandou o array direto [...], usamos ele.
       return Array.isArray(dadosBrutos) ? dadosBrutos : dadosBrutos.dados || [];
     } catch (error) {
-      console.error("❌ Erro no service:", error);
+      console.error("Erro ao listar municípios:", error);
       return [];
     }
   },
@@ -27,7 +22,6 @@ export const municipioService = {
 
   getEvolucao: async (nomeMunicipio: string) => {
     try {
-      // Usamos encode para lidar com nomes tipo "SÃO JOÃO"
       const { data } = await api.get(
         `/municipios/${encodeURIComponent(nomeMunicipio)}/evolucao`,
       );

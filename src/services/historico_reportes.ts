@@ -6,7 +6,6 @@ const api = axios.create({
 
 export const listarReportesPorUsuario = async (usuarioId: number) => {
   try {
-    // A rota deve ser exatamente /reportes/usuario/ID conforme seu router
     const { data } = await api.get(`/reportes/usuario/${usuarioId}`);
     return data;
   } catch (error: any) {
@@ -16,7 +15,6 @@ export const listarReportesPorUsuario = async (usuarioId: number) => {
   }
 };
 
-// Função caso precise pegar detalhes de um reporte específico
 export const buscarReportePorId = async (id: number) => {
   try {
     const { data } = await api.get(`/reportes/${id}`);
