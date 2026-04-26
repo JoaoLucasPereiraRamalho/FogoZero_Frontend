@@ -9,6 +9,7 @@ import { Footer } from "../components/Footer/Footer";
 import { DistribuicaoBiomas } from "../components/Biomas/DistribuicaoBiomas";
 import { EvolucaoMensalBioma } from "../components/Biomas/EvolucaoMensalBioma";
 import { EstatisticasBioma } from "../components/Biomas/EstatisticasBioma";
+import { biomaService } from "../services/bioma";
 
 interface Municipio {
   id: number;
@@ -22,27 +23,15 @@ interface Municipio {
   mes_mais_afetado?: string;
 }
 
-const BIOMAS_MAP: Record<string, number> = {
-  Município: 1,
-  Amazônia: 2,
-  Caatinga: 3,
-  Cerrado: 4,
-  "Mata Atlântica": 5,
-  Pampa: 6,
-  Pantanal: 7,
-};
-
-const getBiomaId = (nomeBioma?: string) => {
-  if (!nomeBioma) return 1;
-  return BIOMAS_MAP[nomeBioma] || 1;
-};
-
 export function DashboardPage() {
   const [municipios, setMunicipios] = useState<Municipio[]>([]);
   const [municipioAtivo, setMunicipioAtivo] = useState<Municipio | null>(null);
   const [loading, setLoading] = useState(true);
-  const [anoFiltro] = useState(2026);
+  const [anoFiltro, setAnoFiltro] = useState(2026);
+  const [anosDisponiveis, setAnosDisponiveis] = useState<number[]>([2026]);
   const [biomaFoco, setBiomaFoco] = useState<string>("");
+  // ID real do bioma vem do backend via onBiomaChange do EvolucaoMensalBioma.
+  // Iniciamos com 1 (primeiro bioma da lista) como placeholder seguro.
   const [biomaFocoId, setBiomaFocoId] = useState<number>(1);
 
   // Carrega todos os municípios na inicialização
@@ -63,9 +52,7 @@ export function DashboardPage() {
         if (listaOrdenada.length > 0) {
           const primeiraCity = listaOrdenada[0];
           setMunicipioAtivo(primeiraCity);
-          const biomaInicial = primeiraCity.bioma_mais_afetado || "Cerrado";
-          setBiomaFoco(biomaInicial);
-          setBiomaFocoId(getBiomaId(biomaInicial));
+          setBiomaFoco(primeiraCity.bioma_mais_afetado || "Cerrado");
         }
       } catch (err) {
         console.error("Erro ao carregar lista de cidades:", err);
@@ -76,11 +63,32 @@ export function DashboardPage() {
     carregarCidades();
   }, []);
 
-  // Sincroniza o bioma quando o município muda
+  // Carrega anos disponíveis a partir do backend
+  useEffect(() => {
+    async function carregarAnos() {
+      try {
+        const { anos } = await biomaService.getAnosDisponiveis();
+        if (anos && anos.length > 0) {
+          setAnosDisponiveis(anos);
+          // Se o ano padrão não estiver disponível, usa o mais recente.
+          if (!anos.includes(anoFiltro)) {
+            setAnoFiltro(anos[0]);
+          }
+        }
+      } catch (err) {
+        console.error("Erro ao carregar anos disponíveis:", err);
+      }
+    }
+    carregarAnos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Sincroniza apenas o nome do bioma quando o município muda.
+  // O ID real é atualizado via onBiomaChange do EvolucaoMensalBioma
+  // (que carrega a lista verdadeira de biomas do backend).
   useEffect(() => {
     if (municipioAtivo?.bioma_mais_afetado) {
       setBiomaFoco(municipioAtivo.bioma_mais_afetado);
-      setBiomaFocoId(getBiomaId(municipioAtivo.bioma_mais_afetado));
     }
   }, [municipioAtivo]);
 
@@ -95,82 +103,101 @@ export function DashboardPage() {
     );
 
   return (
-    <main className="min-h-screen bg-[#f8f9fa] pb-20">
+    <div className="min-h-screen flex flex-col bg-[#f8f9fa]">
       <Header />
-      {/* Seção com Cabeçalho e Seletor de Cidade Unificado */}
-      <div className="pt-12 px-6">
-        <div className="max-w-7xl mx-auto">
-          <header className="mb-12">
-            <h1 className="text-4xl font-black text-black mb-2">
-              Monitoramento FogoZero
-            </h1>
-            <p className="text-gray-500 text-sm">
-              Dados consolidados de {municipios.length} municípios mineiros.
-            </p>
-          </header>
+      <main className="flex-grow">
+        {/* Seção com Cabeçalho e Seletor de Cidade Unificado */}
+        <div className="pt-12 px-6">
+          <div className="max-w-7xl mx-auto">
+            <header className="mb-12">
+              <h1 className="text-4xl font-black text-black mb-2">
+                Monitoramento FogoZero
+              </h1>
+              <p className="text-gray-500 text-sm">
+                Dados consolidados de {municipios.length} municípios mineiros.
+              </p>
+            </header>
 
-          {/* INPUT UNIFICADO */}
-          <div className="mb-12">
-            <CitySelector
-              municipios={municipios}
-              municipioSelecionado={municipioAtivo}
-              onCityChange={setMunicipioAtivo}
-            />
+            {/* INPUT UNIFICADO */}
+            <div className="mb-12">
+              <CitySelector
+                municipios={municipios}
+                municipioSelecionado={municipioAtivo}
+                onCityChange={setMunicipioAtivo}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      {/* Dashboard com Cards */}
-      <Dashboard municipioAtivo={municipioAtivo} />
-      {/* Seção com Gráficos e Mapas */}
-      <DashboardGraficos municipioSelecionado={municipioAtivo} />
+        {/* Dashboard com Cards */}
+        <Dashboard municipioAtivo={municipioAtivo} />
+        {/* Seção com Gráficos e Mapas */}
+        <DashboardGraficos municipioSelecionado={municipioAtivo} />
 
-      {/* Seção de Biomas */}
-      <div className="px-6 pt-12">
-        <div className="max-w-7xl mx-auto">
-          <section className="mb-12">
-            <div className="flex justify-between items-end mb-6">
-              <h2 className="text-2xl font-black">Biomas em Minas Gerais</h2>
-              <p className="text-sm text-gray-500 font-medium">
-                Dados consolidados de {anoFiltro}
-              </p>
-            </div>
-
-            <DistribuicaoBiomas ano={anoFiltro} />
-          </section>
-
-          {/* Análise Detalhada do Bioma Específico */}
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-            {/* Gráfico de Evolução */}
-            <div className="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-              <div className="flex justify-between items-center mb-8">
-                <div>
-                  <h3 className="text-lg font-black italic uppercase">
-                    Evolução Mensal
-                  </h3>
-                  <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                    Bioma: {biomaFoco || "Município"}
-                  </p>
+        {/* Seção de Biomas */}
+        <div className="px-6 pt-12">
+          <div className="max-w-7xl mx-auto">
+            <section className="mb-12">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6">
+                <h2 className="text-2xl font-black">Biomas em Minas Gerais</h2>
+                <div className="flex items-center gap-3">
+                  <label
+                    htmlFor="ano-bioma"
+                    className="text-[10px] font-bold uppercase tracking-widest text-gray-500"
+                  >
+                    Ano de referência
+                  </label>
+                  <select
+                    id="ano-bioma"
+                    value={anoFiltro}
+                    onChange={(e) => setAnoFiltro(Number(e.target.value))}
+                    className="appearance-none bg-white border border-gray-200 px-4 py-2 rounded-xl font-bold text-xs outline-none focus:ring-2 focus:ring-red-100 transition-all cursor-pointer"
+                  >
+                    {anosDisponiveis.map((ano) => (
+                      <option key={ano} value={ano}>
+                        {ano}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
-              <EvolucaoMensalBioma
-                id={biomaFocoId}
-                ano={anoFiltro}
-                onBiomaChange={({ id, descricao }) => {
-                  setBiomaFocoId(id);
-                  setBiomaFoco(descricao);
-                }}
-              />
-            </div>
+              <DistribuicaoBiomas ano={anoFiltro} />
+            </section>
 
-            {/* Estatísticas */}
-            <div className="lg:col-span-1">
-              <EstatisticasBioma id={biomaFocoId} ano={anoFiltro} />
-            </div>
-          </section>
+            {/* Análise Detalhada do Bioma Específico */}
+            <section className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+              {/* Gráfico de Evolução */}
+              <div className="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                <div className="flex justify-between items-center mb-8">
+                  <div>
+                    <h3 className="text-lg font-black italic uppercase">
+                      Evolução Mensal
+                    </h3>
+                    <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                      Bioma: {biomaFoco || "Município"}
+                    </p>
+                  </div>
+                </div>
+
+                <EvolucaoMensalBioma
+                  id={biomaFocoId}
+                  ano={anoFiltro}
+                  onBiomaChange={({ id, descricao }) => {
+                    setBiomaFocoId(id);
+                    setBiomaFoco(descricao);
+                  }}
+                />
+              </div>
+
+              {/* Estatísticas */}
+              <div className="lg:col-span-1">
+                <EstatisticasBioma id={biomaFocoId} ano={anoFiltro} />
+              </div>
+            </section>
+          </div>
         </div>
-      </div>
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }

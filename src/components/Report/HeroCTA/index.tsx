@@ -12,18 +12,16 @@ export function HeroCTA() {
   };
 
   return (
-    // Adicionamos 'relative' e 'overflow-hidden' para conter a imagem
-    <section className="relative overflow-hidden py-16 md:py-32 px-4 sm:px-6">
-      {/* 1. A Imagem de Fundo */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/imagem.png"
-          alt="Background"
-          className="w-full h-full object-cover"
-        />
-        {/* 2. Overlay para escurecer ou clarear a imagem e dar contraste ao texto */}
-        <div className="absolute inset-0 bg-white/20 md:bg-white/20"></div>
-      </div>
+    // Imagem aplicada como background do próprio section para eliminar
+    // qualquer gap visual entre o header e o hero. -mt-px compensa
+    // arredondamento de subpixel em zooms >= 80%.
+    <section
+      className="relative overflow-hidden py-16 md:py-32 px-4 sm:px-6 bg-cover bg-center bg-no-repeat block -mt-px"
+      style={{ backgroundImage: "url('/imagem.png')" }}
+      aria-label="Reportar incêndio"
+    >
+      {/* Overlay para contraste do texto */}
+      <div className="absolute inset-0 bg-white/20 z-0"></div>
 
       {/* 3. Conteúdo (z-10 para ficar acima da imagem) */}
       <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">

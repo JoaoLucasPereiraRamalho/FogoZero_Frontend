@@ -20,4 +20,10 @@ export const biomaService = {
     });
     return data;
   },
+
+  // GET /api/biomas/anos-disponiveis -> { anos: number[] }
+  getAnosDisponiveis: async () => {
+    const { data } = await api.get(`/biomas/anos-disponiveis`);
+    return data as { anos: number[] };
+  },
 };

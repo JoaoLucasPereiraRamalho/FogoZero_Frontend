@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import { BotaoPerfil } from "./BotaoPerfil";
 
 export function Header() {
-  // Esse hook descobre qual é a URL atual (ex: '/' ou '/reporte')
   const location = useLocation();
 
   const navLinks = [
@@ -12,29 +11,31 @@ export function Header() {
   ];
 
   return (
-    <header className="bg-fogo-red text-white p-4 shadow-md">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
-        {/* Logo agora usa o componente <Link> */}
+    <header className="bg-linear-to-r from-[#6a0a18] via-[#a8121f] to-[#d12a3d] text-white py-3">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-6">
         <Link
           to="/"
-          className="font-bold text-2xl tracking-tight cursor-pointer"
+          className="cursor-pointer flex items-center"
+          aria-label="Ir para o Portal"
         >
-          Logo
+          <img
+            src="/logo_completa_w.svg"
+            alt="FogoZero MG"
+            className="h-9 w-auto"
+          />
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
           {navLinks.map((link) => {
-            // Verifica se o caminho do link atual é exatamente igual à URL da página
             const isActive = location.pathname === link.path;
-
             return (
               <Link
                 key={link.name}
                 to={link.path}
                 className={`cursor-pointer transition-colors ${
                   isActive
-                    ? "border-b-2 border-white pb-1 font-bold" // Estilo se estiver ativo
-                    : "hover:text-white/80 text-white/90" // Estilo se não estiver
+                    ? "border-b-2 border-white pb-1 font-bold"
+                    : "hover:text-white/80 text-white/90"
                 }`}
               >
                 {link.name}
@@ -43,16 +44,8 @@ export function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-4">
-          <div className="auth-area">
-            <BotaoPerfil />
-          </div>
-          <Link
-            to="/cadastro"
-            className="hidden sm:block px-5 py-2 bg-white text-fogo-red text-sm font-bold rounded-lg shadow-sm hover:bg-gray-100 transition-colors cursor-pointer"
-          >
-            Cadastrar
-          </Link>
+        <div className="flex items-center gap-3">
+          <BotaoPerfil />
         </div>
       </div>
     </header>

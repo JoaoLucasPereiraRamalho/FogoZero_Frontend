@@ -1,48 +1,88 @@
 import { useNavigate } from "react-router-dom";
-import { User, ShieldCheck, LogIn } from "lucide-react";
 
 export function BotaoPerfil() {
   const navigate = useNavigate();
 
-  // 1. Recupera o token e os dados do usuário do LocalStorage
   const token = localStorage.getItem("@FogoZero:token");
   const userData = localStorage.getItem("@FogoZero:user");
   const usuario = userData ? JSON.parse(userData) : null;
+  const isLogged = Boolean(token && usuario);
+  const isAdmin = isLogged && usuario.tipo?.toLowerCase() === "admin";
 
-  // 2. Se não estiver logado, mostra o botão de Login
-  if (!token || !usuario) {
+  function handleLogout() {
+    localStorage.removeItem("@FogoZero:token");
+    localStorage.removeItem("@FogoZero:user");
+    navigate("/");
+    window.location.reload();
+  }
+
+  // Botão "outline" branco (transparente com borda)
+  const outlineCls =
+    "px-5 py-2 border border-white text-white text-sm font-bold rounded-lg hover:bg-white/10 transition-colors cursor-pointer";
+  // Botão "solid" branco (fundo branco, texto vermelho)
+  const solidCls =
+    "px-5 py-2 bg-white text-[#bd1522] text-sm font-bold rounded-lg shadow-sm hover:bg-gray-100 transition-colors cursor-pointer";
+
+  // Não logado: Entrar (outline) + Cadastrar (solid)
+  if (!isLogged) {
     return (
-      <button
-        onClick={() => navigate("/login")}
-        className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-50 transition-all shadow-sm cursor-pointer"
-      >
-        <LogIn size={18} className="text-[#bd1522]" />
-        Entrar
-      </button>
+      <>
+        <button
+          type="button"
+          onClick={() => navigate("/login")}
+          className={outlineCls}
+        >
+          Entrar
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate("/cadastro")}
+          className={`hidden sm:block ${solidCls}`}
+        >
+          Cadastrar
+        </button>
+      </>
     );
   }
 
-  // 3. Se for Admin, mostra botão para o Painel Admin
-  if (usuario.tipo?.toLowerCase() === "admin") {
+  // Admin: Perfil (outline) + Administrador (solid) + Sair (solid)
+  if (isAdmin) {
     return (
-      <button
-        onClick={() => navigate("/admin")}
-        className="flex items-center gap-2 bg-[#bd1522] text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-[#a0121d] transition-all shadow-md cursor-pointer"
-      >
-        <ShieldCheck size={18} />
-        Painel Admin
-      </button>
+      <>
+        <button
+          type="button"
+          onClick={() => navigate("/perfilusuario")}
+          className={outlineCls}
+        >
+          Perfil
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate("/admin")}
+          className={solidCls}
+        >
+          Administrador
+        </button>
+        <button type="button" onClick={handleLogout} className={solidCls}>
+          Sair
+        </button>
+      </>
     );
   }
 
-  // 4. Caso contrário (Usuário Comum), mostra botão para Perfil
+  // Usuário comum: Perfil (outline) + Sair (solid)
   return (
-    <button
-      onClick={() => navigate("/perfilusuario")}
-      className="flex items-center gap-2 bg-white border-2 border-[#bd1522] text-[#bd1522] px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-red-50 transition-all shadow-sm cursor-pointer"
-    >
-      <User size={18} />
-      Meu Perfil
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={() => navigate("/perfilusuario")}
+        className={outlineCls}
+      >
+        Perfil
+      </button>
+      <button type="button" onClick={handleLogout} className={solidCls}>
+        Sair
+      </button>
+    </>
   );
 }

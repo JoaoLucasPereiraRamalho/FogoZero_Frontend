@@ -1,34 +1,22 @@
 export function Footer() {
   return (
-    <footer className="w-full bg-gradient-to-r from-[#5a0010] via-[#8b0000] to-[#bd1522] text-white py-12 px-6">
+    <footer className="w-full bg-linear-to-r from-[#6a0a18] via-[#a8121f] to-[#d12a3d] text-white py-12 px-6">
       <div className="max-w-7xl mx-auto">
-        {/* Parte Superior: Logo, Links e Redes Sociais */}
+        {/* Parte Superior: Logo e Redes Sociais */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-8">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <h2 className="text-4xl font-black italic tracking-tighter">
+          {/* Logo (texto) */}
+          <a
+            href="/"
+            className="flex items-center cursor-pointer"
+            aria-label="Ir para o Portal"
+          >
+            <h2 className="text-3xl font-black italic tracking-tight">
               FogoZero{" "}
               <span className="font-light not-italic uppercase tracking-normal">
                 MG
               </span>
             </h2>
-          </div>
-
-          {/* Links de Navegação */}
-          <nav className="flex items-center gap-8 text-[15px] font-bold">
-            <a href="/" className="hover:opacity-80 transition-opacity">
-              Portal
-            </a>
-            <a
-              href="/dashboard"
-              className="hover:opacity-80 transition-opacity"
-            >
-              Dashboard
-            </a>
-            <a href="/reporte" className="hover:opacity-80 transition-opacity">
-              Reporte
-            </a>
-          </nav>
+          </a>
 
           {/* Ícones de Redes Sociais */}
           <div className="flex items-center gap-5">

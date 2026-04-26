@@ -41,10 +41,23 @@ interface Props {
 }
 
 const getBiomaId = (id: string | number, biomas: BiomaLista[]) => {
-  if (typeof id === "number") return id;
-  if (!isNaN(Number(id))) return Number(id);
+  // Fallback seguro: se a lista estiver vazia, retorna o id solicitado.
+  if (biomas.length === 0) return typeof id === "number" ? id : Number(id) || 1;
+
+  // Se for número, valida se existe na lista; senão cai pro primeiro disponível.
+  if (typeof id === "number") {
+    return biomas.some((b) => b.id === id) ? id : biomas[0].id;
+  }
+
+  // Se for string numérica, mesma validação.
+  const numerico = Number(id);
+  if (!isNaN(numerico)) {
+    return biomas.some((b) => b.id === numerico) ? numerico : biomas[0].id;
+  }
+
+  // Se for nome (descrição), procura por descrição; fallback pro primeiro.
   const encontrado = biomas.find((bioma) => bioma.descricao === id);
-  return encontrado?.id || biomas[0]?.id || 1;
+  return encontrado?.id ?? biomas[0].id;
 };
 
 export function EvolucaoMensalBioma({ id, ano, onBiomaChange }: Props) {

@@ -139,145 +139,194 @@ export function ReportForm() {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <h3 className="text-xl font-bold text-black mb-1 text-center">
-        Registrar ocorrência
-      </h3>
-      <p className="text-gray-600 text-sm mb-6 text-center">
+    <div className="w-full">
+      <h3 className="text-xl font-extrabold text-black mb-1">
         {logado
-          ? "Envie um novo reporte."
-          : "Cadastre-se rapidinho para enviar seu reporte."}
+          ? "Registrar ocorrência"
+          : "Informe seus dados e registre a ocorrência"}
+      </h3>
+      <p className="text-gray-500 text-xs mb-6 leading-relaxed">
+        {logado
+          ? "Informe os dados do local e descreva o que foi observado."
+          : "Essas informações ajudam a ampliar o monitoramento e podem contribuir para a prevenção de novos incêndios."}
       </p>
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        {/* BLOCO DE CADASTRO: Só aparece se estiver deslogado */}
+        {/* BLOCO DE CADASTRO (somente quando deslogado) */}
         {!logado && (
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-col gap-3 animate-in fade-in duration-500">
-            <h4 className="text-xs font-bold text-red-700 uppercase mb-1">
-              Seus Dados (Criação de Conta)
-            </h4>
+          <fieldset className="border-t border-gray-200 pt-4">
+            <legend className="px-2 -ml-2 text-[11px] font-bold uppercase tracking-wider text-gray-500">
+              Seus dados
+            </legend>
 
-            <input
-              type="text"
-              placeholder="Nome completo"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
-              required
-            />
+            <div className="flex flex-col gap-3">
+              <div>
+                <label className="block text-xs font-bold text-gray-800 mb-1">
+                  Nome
+                </label>
+                <input
+                  type="text"
+                  placeholder="Nome completo"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
+                  required
+                />
+              </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input
-                type="email"
-                placeholder="E-mail"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
+              <div>
+                <label className="block text-xs font-bold text-gray-800 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="Informe seu email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-800 mb-1">
+                  Telefone
+                </label>
+                <input
+                  type="text"
+                  placeholder="(00) 00000-0000"
+                  value={telefone}
+                  onChange={(e) => setTelefone(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-800 mb-1">
+                  Senha
+                </label>
+                <input
+                  type="password"
+                  placeholder="Insira sua senha aqui"
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
+                  required
+                />
+              </div>
+            </div>
+          </fieldset>
+        )}
+
+        {/* BLOCO DA OCORRÊNCIA */}
+        <fieldset className="border-t border-gray-200 pt-4">
+          <legend className="px-2 -ml-2 text-[11px] font-bold uppercase tracking-wider text-gray-500">
+            Dados da ocorrência
+          </legend>
+
+          <div className="flex flex-col gap-3">
+            <div>
+              <label className="block text-xs font-bold text-gray-800 mb-1">
+                Tipo de reporte
+              </label>
+              <select
+                value={tipoReporte}
+                onChange={(e) => setTipoReporte(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white"
                 required
-              />
-              <input
-                type="text"
-                placeholder="Telefone"
-                value={telefone}
-                onChange={(e) => setTelefone(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
+              >
+                <option value="">Selecione um tipo de reporte</option>
+                <option value="Incêndio Florestal">Incêndio Florestal</option>
+                <option value="Fogo em Terreno">Fogo em Terreno</option>
+                <option value="Fumaça Intensa">Fumaça Intensa</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-800 mb-1">
+                Localização
+              </label>
+              <select
+                value={municipioNome}
+                onChange={(e) => setMunicipioNome(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white"
+                required
+              >
+                <option value="">
+                  Utilize sua localização atual ou informe manualmente
+                </option>
+                {municipios.map((m) => (
+                  <option key={m.id} value={m.municipio}>
+                    {m.municipio} - MG
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-800 mb-1">
+                Descrição
+              </label>
+              <textarea
+                value={descricao}
+                onChange={(e) => setDescricao(e.target.value)}
+                placeholder="Descreva o que você observou e como a situação se apresenta"
+                rows={3}
+                className="w-full p-3 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
                 required
               />
             </div>
 
-            <input
-              type="password"
-              placeholder="Crie uma senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
-              required
-            />
+            <div>
+              <label className="block text-xs font-bold text-gray-800 mb-1">
+                Envio de arquivos
+              </label>
+              <div className="relative border-2 border-dashed border-gray-300 rounded-lg px-3 py-3 hover:border-red-400 transition-colors focus-within:border-red-500">
+                <div className="flex items-center gap-2">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-gray-400 shrink-0"
+                  >
+                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"></path>
+                  </svg>
+                  <input
+                    type="text"
+                    value={imagemUrl}
+                    onChange={(e) => setImagemUrl(e.target.value)}
+                    placeholder="Cole a URL da foto ou vídeo da ocorrência"
+                    className="w-full text-sm bg-transparent outline-none placeholder:text-gray-400"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        )}
-
-        {/* BLOCO DO REPORTE: Sempre visível */}
-        <div className="grid grid-cols-1 gap-4">
-          <div>
-            <label className="block text-xs font-bold text-gray-800 mb-1">
-              Onde está ocorrendo?
-            </label>
-            <select
-              value={municipioNome}
-              onChange={(e) => setMunicipioNome(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white"
-              required
-            >
-              <option value="">Selecione um município...</option>
-              {municipios.map((m) => (
-                <option key={m.id} value={m.municipio}>
-                  {m.municipio} - MG
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-xs font-bold text-gray-800 mb-1">
-            Tipo de Reporte
-          </label>
-          <select
-            value={tipoReporte}
-            onChange={(e) => setTipoReporte(e.target.value)}
-            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white"
-            required
-          >
-            <option value="">Selecione...</option>
-            <option value="Incêndio Florestal">Incêndio Florestal</option>
-            <option value="Fogo em Terreno">Fogo em Terreno</option>
-            <option value="Fumaça Intensa">Fumaça Intensa</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-xs font-bold text-gray-800 mb-1">
-            Descrição
-          </label>
-          <textarea
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            placeholder="O que está acontecendo? Pontos de referência?"
-            rows={3}
-            className="w-full p-3 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none italic"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-bold text-gray-800 mb-1">
-            URL da Imagem
-          </label>
-          <input
-            type="text"
-            value={imagemUrl}
-            onChange={(e) => setImagemUrl(e.target.value)}
-            placeholder="https://exemplo.com/foto.jpg"
-            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 outline-none"
-            required
-          />
-        </div>
+        </fieldset>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#bd1522] text-white font-bold py-3.5 rounded-xl hover:bg-red-800 transition-all shadow-md active:scale-[0.98] disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+          className="w-full bg-[#bd1522] text-white font-bold py-3.5 rounded-xl hover:bg-red-800 transition-all shadow-md active:scale-[0.98] disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed mt-2"
         >
           {loading
             ? "Processando..."
             : logado
-              ? "Enviar Reporte"
-              : "Cadastrar e Reportar"}
+              ? "Enviar ocorrência"
+              : "Cadastrar e enviar ocorrência"}
         </button>
 
         <p className="text-[10px] text-center text-gray-400">
-          Sua localização aproximada será enviada para as autoridades
-          ambientais.
+          {logado
+            ? "Seus dados serão utilizados apenas para monitoramento ambiental."
+            : "Seus dados serão utilizados apenas para monitoramento e acesso à sua conta na plataforma."}
         </p>
       </form>
     </div>
