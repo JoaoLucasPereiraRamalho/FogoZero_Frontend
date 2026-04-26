@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { User, Mail, MapPin, Lock, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { User, Mail, MapPin, Loader2 } from "lucide-react";
 import { InputGroup } from "../Cadastro/InputGroup";
-import { buscarPerfil, atualizarPerfil, excluirConta } from "../../services/crud_usuario";
+import { buscarPerfil, atualizarPerfil } from "../../services/crud_usuario";
 import { getLoggedUser } from "../../utils/auth";
 
 export function ProfileDataForm() {
   const user = getLoggedUser();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  
+
   // Estado para os campos do formulário
   const [formData, setFormData] = useState({
     nome: "",
@@ -30,7 +30,7 @@ export function ProfileDataForm() {
             nome: dados.nome || "",
             email: dados.email || "",
             // Caso seu backend retorne a região/município vinculado:
-            cidade: dados.municipio?.nome || "", 
+            cidade: dados.municipio?.nome || "",
             estado: "MG", // FogoZero foca em MG
           }));
         } catch (err) {
@@ -61,9 +61,9 @@ export function ProfileDataForm() {
 
       await atualizarPerfil(user.id, payload);
       alert("Informações atualizadas com sucesso!");
-      
+
       // Limpa campos de senha após sucesso
-      setFormData(prev => ({ ...prev, senha_atual: "", nova_senha: "" }));
+      setFormData((prev) => ({ ...prev, senha_atual: "", nova_senha: "" }));
     } catch (err: any) {
       alert(err);
     } finally {
@@ -92,14 +92,18 @@ export function ProfileDataForm() {
           label="Nome"
           placeholder="Nome completo"
           value={formData.nome}
-          onChange={(e: any) => setFormData({ ...formData, nome: e.target.value })}
+          onChange={(e: any) =>
+            setFormData({ ...formData, nome: e.target.value })
+          }
           icon={<User size={16} />}
         />
         <InputGroup
           label="Email"
           placeholder="Email de acesso"
           value={formData.email}
-          onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+          onChange={(e: any) =>
+            setFormData({ ...formData, email: e.target.value })
+          }
           icon={<Mail size={16} />}
         />
 
@@ -120,7 +124,7 @@ export function ProfileDataForm() {
           />
         </div>
 
-        <button 
+        <button
           type="submit"
           disabled={updating}
           className="mt-4 bg-[#bd1522] text-white px-8 py-2 rounded-lg font-bold text-xs hover:bg-[#a0121d] transition-colors flex items-center gap-2 disabled:opacity-50"

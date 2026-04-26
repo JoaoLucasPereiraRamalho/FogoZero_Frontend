@@ -20,8 +20,8 @@ export const registerUser = async (
   nome: string,
   email: string,
   senha: string,
-  telefone?: string,
   id_regiao: number,
+  telefone?: string,
 ): Promise<any> => {
   try {
     const { data } = await api.post("/auth/register", {
@@ -53,7 +53,9 @@ export const solicitarRecuperacao = async (email: string) => {
     return data;
   } catch (error: any) {
     // Retorna a mensagem de erro vinda do backend ou uma genérica
-    throw error.response?.data?.mensagem || "Erro ao solicitar recuperação de senha";
+    throw (
+      error.response?.data?.mensagem || "Erro ao solicitar recuperação de senha"
+    );
   }
 };
 
@@ -61,13 +63,16 @@ export const solicitarRecuperacao = async (email: string) => {
 export const resetarSenha = async (token: string, novaSenha: string) => {
   try {
     // Note que o corpo da requisição deve bater com o seu resetPasswordSchema no backend
-    const { data } = await api.post("/auth/reset-password", { 
-      token, 
-      senha: novaSenha 
+    const { data } = await api.post("/auth/reset-password", {
+      token,
+      senha: novaSenha,
     });
     return data;
   } catch (error: any) {
-    throw error.response?.data?.mensagem || "Erro ao redefinir senha. O link pode ter expirado.";
+    throw (
+      error.response?.data?.mensagem ||
+      "Erro ao redefinir senha. O link pode ter expirado."
+    );
   }
 };
 

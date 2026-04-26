@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   registrarMonitoramento,
   listarMonitoramentos,
@@ -6,7 +6,7 @@ import {
 } from "../../services/monitoramento";
 import { municipioService } from "../../services/municipio";
 import { getLoggedUser } from "../../utils/auth";
-import { Loader2, Trash2, MapPin } from "lucide-react";
+import { Loader2, MapPin } from "lucide-react";
 
 export function CityAlertsManager() {
   const [monitoramentos, setMonitoramentos] = useState<any[]>([]);
@@ -90,13 +90,15 @@ export function CityAlertsManager() {
 
   return (
     <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm h-full">
-      <h3 className="text-lg font-bold text-black mb-1">Alertas por município</h3>
+      <h3 className="text-lg font-bold text-black mb-1">
+        Alertas por município
+      </h3>
       <p className="text-[11px] text-gray-500 mb-6 leading-tight">
         Escolha as cidades que deseja acompanhar para o monitoramento FogoZero.
       </p>
 
       <div className="flex flex-col gap-2 mb-8">
-        <select 
+        <select
           value={cidadeSelecionada}
           onChange={(e) => setCidadeSelecionada(e.target.value)}
           className="w-full p-2.5 border border-gray-300 rounded-lg text-sm text-gray-600 outline-none"
@@ -121,7 +123,7 @@ export function CityAlertsManager() {
 
       <div className="border border-gray-100 rounded-xl p-4">
         <h4 className="text-sm font-bold mb-1">Cidades monitoradas</h4>
-        
+
         {fetching ? (
           <div className="flex justify-center py-4">
             <Loader2 className="animate-spin text-gray-400" size={20} />

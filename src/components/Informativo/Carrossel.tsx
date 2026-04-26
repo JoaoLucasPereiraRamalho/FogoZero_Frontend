@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import { useState } from "react";
+import { ChevronRight } from "lucide-react";
 
 const SLIDES = [
   {

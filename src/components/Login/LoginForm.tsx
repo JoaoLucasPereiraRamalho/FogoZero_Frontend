@@ -1,4 +1,5 @@
-import React, { useState, FormEvent } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye } from "lucide-react";
 import authService from "../../services/auth"; // Importando seu service

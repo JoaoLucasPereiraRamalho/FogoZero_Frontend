@@ -1,8 +1,9 @@
-import React, { useState, FormEvent } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { Mail, ArrowLeft, Loader2, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 // Adicionei as chaves aqui, que é o padrão mais comum
-import { solicitarRecuperacao } from "../../services/auth"; 
+import { solicitarRecuperacao } from "../../services/auth";
 import { InputGroup } from "../Cadastro/InputGroup";
 
 export function ForgotPassword() {
@@ -32,12 +33,15 @@ export function ForgotPassword() {
     return (
       <div className="max-w-md w-full py-8 text-center animate-in fade-in zoom-in duration-300">
         <CheckCircle size={64} className="text-green-500 mx-auto mb-4" />
-        <h2 className="text-3xl font-extrabold text-black mb-2">E-mail enviado!</h2>
+        <h2 className="text-3xl font-extrabold text-black mb-2">
+          E-mail enviado!
+        </h2>
         <p className="text-gray-500 text-sm mb-8 leading-relaxed">
-          Se o e-mail <strong>{email}</strong> estiver cadastrado, você receberá um link para criar uma nova senha em instantes.
+          Se o e-mail <strong>{email}</strong> estiver cadastrado, você receberá
+          um link para criar uma nova senha em instantes.
         </p>
-        <button 
-          onClick={() => navigate("/login")} 
+        <button
+          onClick={() => navigate("/login")}
           className="text-[#bd1522] font-bold hover:underline transition-all"
         >
           Voltar para o login
@@ -48,16 +52,19 @@ export function ForgotPassword() {
 
   return (
     <div className="max-w-md w-full py-8">
-      <button 
-        onClick={() => navigate("/login")} 
+      <button
+        onClick={() => navigate("/login")}
         className="flex items-center gap-2 text-gray-500 hover:text-black mb-6 text-sm transition-all"
       >
         <ArrowLeft size={16} /> Voltar ao login
       </button>
-      
-      <h2 className="text-4xl font-extrabold text-black mb-2">Esqueceu a senha?</h2>
+
+      <h2 className="text-4xl font-extrabold text-black mb-2">
+        Esqueceu a senha?
+      </h2>
       <p className="text-gray-500 text-sm mb-8 leading-relaxed">
-        Não se preocupe! Digite seu e-mail abaixo e enviaremos as instruções para você recuperar o acesso.
+        Não se preocupe! Digite seu e-mail abaixo e enviaremos as instruções
+        para você recuperar o acesso.
       </p>
 
       {erro && (
@@ -76,7 +83,7 @@ export function ForgotPassword() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        
+
         <button
           type="submit"
           disabled={loading}

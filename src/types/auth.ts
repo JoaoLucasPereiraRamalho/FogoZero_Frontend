@@ -3,6 +3,7 @@ export interface Usuario {
   nome: string;
   email: string;
   telefone?: string;
+  tipo?: string;
 }
 
 export interface LoginResponse {
