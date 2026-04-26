@@ -95,7 +95,7 @@ export function HeatMap() {
         </div>
 
         {/* CONTAINER DO MAPA REAL (IFRAME) */}
-        <div className="w-full h-[500px] bg-gray-100 rounded-lg overflow-hidden border border-gray-200 relative">
+        <div className="w-full h-125 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 relative">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15214878.711867142!2d-52.92341908202573!3d-18.431874251787163!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa690a165324289%3A0x112170c9379de7b3!2sMinas%20Gerais!5e0!3m2!1spt-BR!2sbr!4v1712760000000!5m2!1spt-BR!2sbr"
             width="100%"

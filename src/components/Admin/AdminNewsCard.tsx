@@ -19,7 +19,7 @@ export function AdminNewsCard({ noticia, onAction }: AdminNewsCardProps) {
         </span>
       </div>
 
-      <div className="p-5 flex flex-col flex-grow">
+      <div className="p-5 flex flex-col grow">
         <h4 className="font-bold text-black text-sm leading-snug mb-2 line-clamp-2">
           {noticia.titulo}
         </h4>

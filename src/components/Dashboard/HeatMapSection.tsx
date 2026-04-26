@@ -24,7 +24,7 @@ export function HeatMapSection() {
       </div>
 
       {/* Área do Mapa */}
-      <div className="w-full h-[400px] bg-gray-100 rounded-2xl overflow-hidden relative">
+      <div className="w-full h-100 bg-gray-100 rounded-2xl overflow-hidden relative">
         <img
           src="https://maps.googleapis.com/maps/api/staticmap?center=-21.2485,-44.9961&zoom=13&size=1200x400&key=YOUR_KEY"
           alt="Mapa de Lavras"

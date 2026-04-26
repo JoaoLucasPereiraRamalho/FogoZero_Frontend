@@ -42,10 +42,10 @@ export function EmergencyGuidelines() {
             className="group relative overflow-hidden bg-white border border-gray-100 rounded-2xl p-4 pl-6 flex items-center gap-4 shadow-md shadow-gray-200/50 transition-all hover:shadow-lg"
           >
             {/* Gradiente Lateral mais fino */}
-            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-red-100/40 to-transparent border-l-4 border-[#bd1522] pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-20 bg-linear-to-r from-red-100/40 to-transparent border-l-4 border-[#bd1522] pointer-events-none" />
 
             {/* Ícone menor */}
-            <div className="z-10 flex-shrink-0">{item.icon}</div>
+            <div className="z-10 shrink-0">{item.icon}</div>
 
             {/* Textos mais compactos */}
             <div className="z-10">
