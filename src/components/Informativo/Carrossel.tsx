@@ -4,17 +4,17 @@ import { ChevronRight } from "lucide-react";
 const SLIDES = [
   {
     id: 1,
-    image: "/public/carrossel.png",
+    image: "/carrossel.png",
   },
 
   {
     id: 2,
-    image: "/public/carrossel2.png", // Substitua pela sua imagem local
+    image: "/carrossel2.png",
   },
 
   {
     id: 3,
-    image: "/public/carrossel.png", // Substitua pela sua imagem local
+    image: "/carrossel.png",
   },
   // Adicione mais slides aqui se quiser que ele gire
 ];

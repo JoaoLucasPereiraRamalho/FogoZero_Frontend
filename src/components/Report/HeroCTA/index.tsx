@@ -17,7 +17,7 @@ export function HeroCTA() {
       {/* 1. A Imagem de Fundo */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/public/imagem.png"
+          src="/imagem.png"
           alt="Background"
           className="w-full h-full object-cover"
         />

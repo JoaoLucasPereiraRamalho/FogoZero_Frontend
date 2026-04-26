@@ -13,7 +13,7 @@ export function Cadastro() {
           {/* Lado Esquerdo: Área da Imagem Arredondada */}
           <div className="hidden lg:block h-[800px] bg-gray-200 rounded-[3rem] overflow-hidden">
             <img
-              src="/public/cadastro.png"
+              src="/cadastro.png"
               alt="Incêndio Florestal"
               className="w-full h-full object-cover opacity-80"
             />
