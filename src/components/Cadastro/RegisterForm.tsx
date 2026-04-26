@@ -13,13 +13,29 @@ export function RegisterForm() {
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [telefone, setTelefone] = useState("");
-  const [idRegiao, setIdRegiao] = useState<number>(2);
+  const [idRegiao, setIdRegiao] = useState<number>(1);
 
   // Estados de controle da UI
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
 
   const navigate = useNavigate();
+
+  const REGIOES_DISPONIVEIS: Array<{
+    id: number;
+    nome: string;
+    bioma: string;
+  }> = [
+    { id: 1, nome: "Serra do Gandarela", bioma: "Cerrado" },
+    { id: 2, nome: "Serra do Cipó", bioma: "Cerrado" },
+    { id: 3, nome: "Serra da Canastra", bioma: "Cerrado" },
+    { id: 4, nome: "Grande Sertão Veredas", bioma: "Cerrado" },
+    { id: 5, nome: "Serra da Mantiqueira", bioma: "Mata Atlântica" },
+    { id: 6, nome: "Parque Estadual do Ibitipoca", bioma: "Mata Atlântica" },
+    { id: 7, nome: "APA Sul RMBH", bioma: "Mata Atlântica" },
+    { id: 8, nome: "Parque Estadual da Lapa Grande", bioma: "Caatinga" },
+    { id: 9, nome: "APA Carste de Lagoa Santa", bioma: "Caatinga" },
+  ];
 
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
@@ -47,8 +63,14 @@ export function RegisterForm() {
 
       alert("Conta criada com sucesso!");
       navigate("/login");
-    } catch (err: any) {
-      setErro(err || "Erro ao criar conta. Tente novamente.");
+    } catch (err) {
+      setErro(
+        err instanceof Error
+          ? err.message
+          : typeof err === "string"
+            ? err
+            : "Erro ao criar conta. Tente novamente.",
+      );
     } finally {
       setLoading(false);
     }
@@ -124,13 +146,15 @@ export function RegisterForm() {
               className="w-full p-2.5 pl-10 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-500 outline-none appearance-none bg-white"
               required
             >
-              <option value={1}>Belo Horizonte - MG</option>
-              <option value={2}>Lavras - MG</option>
-              <option value={3}>Uberlândia - MG</option>
+              {REGIOES_DISPONIVEIS.map((regiao) => (
+                <option key={regiao.id} value={regiao.id}>
+                  {regiao.nome} — {regiao.bioma}
+                </option>
+              ))}
             </select>
           </div>
           <span className="text-[10px] text-gray-400">
-            Você receberá alertas desta cidade.
+            Você receberá alertas desta região.
           </span>
         </div>
 

@@ -1,8 +1,11 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 // Importando as duas funções de serviço
 import { criarReporte, criarPrimeiroReporte } from "../../../services/reporte";
+import { municipioService } from "../../../services/municipio";
 import { isUserLogged } from "../../../utils/auth";
+import { getBiomaRegiao } from "../../../utils/geo";
+import type { MunicipioMG } from "../../../types/models";
 
 export function ReportForm() {
   const navigate = useNavigate();
@@ -15,11 +18,28 @@ export function ReportForm() {
   const [senha, setSenha] = useState("");
 
   // --- ESTADOS DO REPORTE (Sempre visíveis) ---
-  const [idRegiao, setIdRegiao] = useState<number>(2); // Default Lavras
+  const [municipios, setMunicipios] = useState<MunicipioMG[]>([]);
+  const [municipioNome, setMunicipioNome] = useState<string>("");
   const [tipoReporte, setTipoReporte] = useState("");
   const [descricao, setDescricao] = useState("");
   const [imagemUrl, setImagemUrl] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const carregarMunicipios = async () => {
+      const lista = (await municipioService.listar()) as MunicipioMG[];
+      const ordenados = [...lista].sort((a, b) =>
+        (a.municipio || "").localeCompare(b.municipio || ""),
+      );
+      setMunicipios(ordenados);
+    };
+    carregarMunicipios();
+  }, []);
+
+  const municipioSelecionado = useMemo(
+    () => municipios.find((m) => m.municipio === municipioNome) || null,
+    [municipios, municipioNome],
+  );
 
   const isValidImageUrl = (url: string) => {
     const value = url.trim();
@@ -42,12 +62,15 @@ export function ReportForm() {
     setLoading(true);
 
     try {
+      if (!municipioSelecionado) {
+        throw new Error("Selecione um município válido.");
+      }
+
       const tituloFinal = tipoReporte;
       const assuntoFinal = descricao;
-      // Coordenadas placeholder — serão substituídas pelas coords reais do
-      // município escolhido na Fase 5 (select dinâmico).
-      const latitudeFinal = -21.0;
-      const longitudeFinal = -45.0;
+      const latitudeFinal = Number(municipioSelecionado.lat ?? -21.0);
+      const longitudeFinal = Number(municipioSelecionado.lon ?? -45.0);
+      const idRegiao = getBiomaRegiao(municipioSelecionado.bioma_mais_afetado);
       const imagemUrlFinal = imagemUrl.trim();
 
       if (!isValidImageUrl(imagemUrlFinal)) {
@@ -105,6 +128,7 @@ export function ReportForm() {
       setDescricao("");
       setImagemUrl("");
       setTipoReporte("");
+      setMunicipioNome("");
     } catch (error: unknown) {
       alert(
         `Erro no envio: ${error instanceof Error ? error.message : String(error)}`,
@@ -179,13 +203,17 @@ export function ReportForm() {
               Onde está ocorrendo?
             </label>
             <select
-              value={idRegiao}
-              onChange={(e) => setIdRegiao(Number(e.target.value))}
+              value={municipioNome}
+              onChange={(e) => setMunicipioNome(e.target.value)}
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white"
+              required
             >
-              <option value={1}>Belo Horizonte - MG</option>
-              <option value={2}>Lavras - MG</option>
-              <option value={3}>Uberlândia - MG</option>
+              <option value="">Selecione um município...</option>
+              {municipios.map((m) => (
+                <option key={m.id} value={m.municipio}>
+                  {m.municipio} - MG
+                </option>
+              ))}
             </select>
           </div>
         </div>
