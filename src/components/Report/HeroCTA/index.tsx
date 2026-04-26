@@ -17,7 +17,7 @@ export function HeroCTA() {
     // arredondamento de subpixel em zooms >= 80%.
     <section
       className="relative overflow-hidden py-16 md:py-32 px-4 sm:px-6 bg-cover bg-center bg-no-repeat block -mt-px"
-      style={{ backgroundImage: "url('/imagem.png')" }}
+      style={{ backgroundImage: "url('/reporte.png')" }}
       aria-label="Reportar incêndio"
     >
       {/* Overlay para contraste do texto */}
