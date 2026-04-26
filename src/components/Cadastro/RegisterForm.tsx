@@ -40,8 +40,8 @@ export function RegisterForm() {
         nomeCompleto,
         email,
         senha,
-        telefone,
         idRegiao,
+        telefone,
       );
 
       alert("Conta criada com sucesso!");
