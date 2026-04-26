@@ -1,9 +1,5 @@
-import axios from "axios";
+import { api } from "./api";
 import { extractApiError } from "../utils/errors";
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
-});
 
 export const listarReportesPorUsuario = async (usuarioId: number) => {
   try {

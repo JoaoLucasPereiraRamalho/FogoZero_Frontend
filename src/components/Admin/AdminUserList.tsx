@@ -71,9 +71,7 @@ export function AdminUserList() {
     try {
       setDeletandoId(usuarioId);
       await excluirUsuarioPorId(usuarioId);
-      setUsuarios((prev) =>
-        prev.filter((u) => getUsuarioId(u) !== usuarioId),
-      );
+      setUsuarios((prev) => prev.filter((u) => getUsuarioId(u) !== usuarioId));
     } catch (err) {
       console.error("Erro ao excluir usuário:", err);
       alert(`Não foi possível excluir o usuário: ${String(err)}`);

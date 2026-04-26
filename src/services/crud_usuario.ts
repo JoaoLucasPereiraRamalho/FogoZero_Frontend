@@ -1,19 +1,5 @@
-import axios from "axios";
+import { api } from "./api";
 import { extractApiError } from "../utils/errors";
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
-});
-
-// Função auxiliar para obter os headers com o token atualizado
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("@FogoZero:token");
-  return {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : "",
-    },
-  };
-};
 
 export interface UserUpdateData {
   nome?: string;
@@ -26,7 +12,7 @@ export interface UserUpdateData {
 // Busca os dados do perfil (GET /api/usuarios/:id)
 export const buscarPerfil = async (id: number) => {
   try {
-    const { data } = await api.get(`/usuarios/${id}`, getAuthHeaders());
+    const { data } = await api.get(`/usuarios/${id}`);
     return data.usuario;
   } catch (error) {
     throw extractApiError(error, "Erro ao buscar dados do perfil");
@@ -36,11 +22,7 @@ export const buscarPerfil = async (id: number) => {
 // Atualiza dados do perfil (PATCH /api/usuarios/:id)
 export const atualizarPerfil = async (id: number, dados: UserUpdateData) => {
   try {
-    const { data } = await api.patch(
-      `/usuarios/${id}`,
-      dados,
-      getAuthHeaders(),
-    );
+    const { data } = await api.patch(`/usuarios/${id}`, dados);
     return data;
   } catch (error) {
     throw extractApiError(error, "Erro ao atualizar perfil");
@@ -50,7 +32,7 @@ export const atualizarPerfil = async (id: number, dados: UserUpdateData) => {
 // Exclui a própria conta (DELETE /api/usuarios/:id)
 export const excluirConta = async (id: number) => {
   try {
-    await api.delete(`/usuarios/${id}`, getAuthHeaders());
+    await api.delete(`/usuarios/${id}`);
   } catch (error) {
     throw extractApiError(error, "Erro ao excluir conta");
   }
@@ -59,7 +41,7 @@ export const excluirConta = async (id: number) => {
 // Exclui um usuário por ID (uso administrativo)
 export const excluirUsuarioPorId = async (id: number) => {
   try {
-    await api.delete(`/usuarios/${id}`, getAuthHeaders());
+    await api.delete(`/usuarios/${id}`);
   } catch (error) {
     throw extractApiError(error, "Erro ao excluir usuário");
   }
@@ -67,7 +49,7 @@ export const excluirUsuarioPorId = async (id: number) => {
 
 export const listarTodosUsuarios = async () => {
   try {
-    const { data } = await api.get("/usuarios", getAuthHeaders());
+    const { data } = await api.get("/usuarios");
     return data.data || data;
   } catch (error) {
     throw extractApiError(error, "Erro ao listar usuários");

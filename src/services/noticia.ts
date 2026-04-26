@@ -1,10 +1,5 @@
-// src/services/noticiaService.ts
-import axios from "axios";
+import { api } from "./api";
 import type { NoticiaResponse, ImportacaoResponse } from "../types/noticia";
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
-});
 
 export const noticiaService = {
   // Tipando o retorno como Promise<NoticiaResponse>
