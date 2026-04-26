@@ -1,4 +1,5 @@
 import { MapPin, Megaphone, Bell, Flame } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function AboutSection() {
   const infoCards = [
@@ -7,24 +8,28 @@ export function AboutSection() {
       desc: "Veja mapas e indicadores atualizados",
       icon: <MapPin className="text-[#bd1522]" size={20} />,
       gradient: "from-red-100/60",
+      to: "/dashboard",
     },
     {
       title: "Reporte ocorrências",
       desc: "Ajude a identificar focos de incêndio",
       icon: <Megaphone className="text-[#bd1522]" size={20} />,
       gradient: "from-orange-100/60",
+      to: "/reporte",
     },
     {
       title: "Receba alertas",
       desc: "Seja avisado sobre riscos na sua região",
       icon: <Bell className="text-orange-500" size={20} />,
       gradient: "from-orange-100/40",
+      to: "/perfilusuario",
     },
     {
       title: "Acompanhe as queimadas",
       desc: "Veja como os incêndios mudaram ao longo do tempo.",
       icon: <Flame className="text-[#bd1522]" size={20} />,
       gradient: "from-red-100/60",
+      to: "/dashboard",
     },
   ];
 
@@ -72,13 +77,14 @@ export function AboutSection() {
         {/* Coluna da Direita (Cards) */}
         <div className="flex flex-col gap-5">
           {infoCards.map((card, index) => (
-            <div
+            <Link
               key={index}
+              to={card.to}
               className="group relative overflow-hidden bg-[#f3f4f6]/40 border border-gray-100 rounded-[1.8rem] p-6 flex items-center gap-6 shadow-sm hover:shadow-md transition-all duration-300"
             >
               {/* Gradiente Lateral (O toque do design) */}
               <div
-                className={`absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r ${card.gradient} to-transparent pointer-events-none`}
+                className={`absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r ${card.gradient} to-transparent pointer-events-none`}
               />
 
               {/* Container do Ícone */}
@@ -95,7 +101,7 @@ export function AboutSection() {
                   {card.desc}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

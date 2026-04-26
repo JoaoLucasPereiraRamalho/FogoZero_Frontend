@@ -69,11 +69,11 @@ export function NewsGrid() {
               </div>
 
               {/* Conteúdo Dinâmico */}
-              <div className="p-5 flex flex-col flex-grow">
+              <div className="p-5 flex flex-col grow">
                 <h4 className="font-bold text-black text-[15px] leading-snug mb-2 line-clamp-2">
                   {item.titulo}
                 </h4>
-                <p className="text-[13px] text-gray-600 leading-relaxed mb-6 flex-grow line-clamp-3">
+                <p className="text-[13px] text-gray-600 leading-relaxed mb-6 grow line-clamp-3">
                   {item.conteudo}
                 </p>
 

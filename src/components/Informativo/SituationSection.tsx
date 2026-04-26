@@ -1,4 +1,5 @@
 import { Flame, TrendingUp, TreePine, AlertTriangle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function SituationSection() {
   const cards = [
@@ -49,9 +50,12 @@ export function SituationSection() {
             cenário ambiental da sua região.
           </p>
 
-          <button className="px-8 py-3.5 bg-[#bd1522] text-white font-bold rounded-xl shadow-lg shadow-red-900/20 hover:bg-red-800 transition-all active:scale-95">
+          <Link
+            to="/dashboard"
+            className="inline-block px-8 py-3.5 bg-[#bd1522] text-white font-bold rounded-xl shadow-lg shadow-red-900/20 hover:bg-red-800 transition-all active:scale-95"
+          >
             Acessar Dashboard
-          </button>
+          </Link>
         </div>
 
         {/* Coluna da Direita (Grid de Cards) */}
@@ -59,7 +63,7 @@ export function SituationSection() {
           {cards.map((card, idx) => (
             <div
               key={idx}
-              className={`bg-gradient-to-br ${card.bg} border border-gray-100 rounded-[2.5rem] p-8 shadow-lg shadow-gray-200/50 min-h-[220px] flex flex-col justify-center `}
+              className={`bg-linear-to-br ${card.bg} border border-gray-100 rounded-[2.5rem] p-8 shadow-lg shadow-gray-200/50 min-h-55 flex flex-col justify-center `}
             >
               <div
                 className={`w-12 h-12 rounded-full ${card.iconBg} ${card.iconColor} flex items-center justify-center mb-6 shadow-lg shadow-black/10`}
