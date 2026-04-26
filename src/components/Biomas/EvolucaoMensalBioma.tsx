@@ -57,7 +57,7 @@ export function EvolucaoMensalBioma({ id, ano, onBiomaChange }: Props) {
 
   const [loading, setLoading] = useState(true);
   const [loadingGrafico, setLoadingGrafico] = useState(false);
-  const [erro, setErro] = useState<string | null>(null);
+  const [, setErro] = useState<string | null>(null);
 
   // 1. CARGA INICIAL: Busca a lista de biomas existentes na API
   useEffect(() => {
@@ -73,9 +73,14 @@ export function EvolucaoMensalBioma({ id, ano, onBiomaChange }: Props) {
           setBiomasDisponiveis(listaBiomas);
           const idInicial = getBiomaId(id, listaBiomas);
           setBiomaAtivoId(idInicial);
-          const biomaInicial = listaBiomas.find((bioma) => bioma.id === idInicial);
+          const biomaInicial = listaBiomas.find(
+            (bioma) => bioma.id === idInicial,
+          );
           if (biomaInicial && onBiomaChange) {
-            onBiomaChange({ id: biomaInicial.id, descricao: biomaInicial.descricao });
+            onBiomaChange({
+              id: biomaInicial.id,
+              descricao: biomaInicial.descricao,
+            });
           }
         }
       } catch (err) {
@@ -212,7 +217,7 @@ export function EvolucaoMensalBioma({ id, ano, onBiomaChange }: Props) {
                 border: "none",
                 boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
               }}
-              formatter={(val: number) => [val.toLocaleString(), "Focos"]}
+              formatter={(val) => [(val as number).toLocaleString(), "Focos"]}
             />
             <Area
               type="monotone"

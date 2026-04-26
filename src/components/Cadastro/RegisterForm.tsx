@@ -1,4 +1,5 @@
-import React, { useState, FormEvent } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, MapPin, Lock, Loader2, Phone } from "lucide-react";
 import { InputGroup } from "./InputGroup";

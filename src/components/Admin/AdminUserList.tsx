@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Users,
   Mail,
@@ -14,7 +14,7 @@ import {
 } from "../../services/crud_usuario";
 
 export function AdminUserList() {
-  const [usuarios, setUsuarios] = useState([]); // Sempre inicia como array vazio
+  const [usuarios, setUsuarios] = useState<any[]>([]); // Sempre inicia como array vazio
   const [loading, setLoading] = useState(true);
   const [busca, setBusca] = useState("");
   const [deletandoId, setDeletandoId] = useState<number | null>(null);
