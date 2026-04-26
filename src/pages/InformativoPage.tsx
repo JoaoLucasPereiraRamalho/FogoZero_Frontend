@@ -3,6 +3,7 @@ import { HeroCarousel } from "../components/Informativo/HeroCarousel";
 import { AboutSection } from "../components/Informativo/AboutSection";
 import { NewsGrid } from "../components/Informativo/Noticia/NewsGrid";
 import { SituationSection } from "../components/Informativo/SituationSection";
+import { GlossarySection } from "../components/Informativo/GlossarySection";
 import { Footer } from "../components/Footer/Footer";
 
 export function InformativoPage() {
@@ -15,6 +16,7 @@ export function InformativoPage() {
         <AboutSection />
         <NewsGrid />
         <SituationSection />
+        <GlossarySection />
       </main>
       <Footer />
     </div>
