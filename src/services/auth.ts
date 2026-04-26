@@ -10,11 +10,15 @@ export const loginUser = async (
   email: string,
   senha: string,
 ): Promise<LoginResponse> => {
-  const { data } = await api.post<LoginResponse>("/auth/login", {
-    email,
-    senha,
-  });
-  return data;
+  try {
+    const { data } = await api.post<LoginResponse>("/auth/login", {
+      email,
+      senha,
+    });
+    return data;
+  } catch (error) {
+    throw extractApiError(error, "Email ou senha incorretos");
+  }
 };
 
 export const registerUser = async (
