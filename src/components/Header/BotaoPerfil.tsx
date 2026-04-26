@@ -14,7 +14,7 @@ export function BotaoPerfil() {
     return (
       <button
         onClick={() => navigate("/login")}
-        className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-50 transition-all shadow-sm"
+        className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-50 transition-all shadow-sm cursor-pointer"
       >
         <LogIn size={18} className="text-[#bd1522]" />
         Entrar
@@ -27,7 +27,7 @@ export function BotaoPerfil() {
     return (
       <button
         onClick={() => navigate("/admin")}
-        className="flex items-center gap-2 bg-[#bd1522] text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-[#a0121d] transition-all shadow-md"
+        className="flex items-center gap-2 bg-[#bd1522] text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-[#a0121d] transition-all shadow-md cursor-pointer"
       >
         <ShieldCheck size={18} />
         Painel Admin
@@ -39,7 +39,7 @@ export function BotaoPerfil() {
   return (
     <button
       onClick={() => navigate("/perfilusuario")}
-      className="flex items-center gap-2 bg-white border-2 border-[#bd1522] text-[#bd1522] px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-red-50 transition-all shadow-sm"
+      className="flex items-center gap-2 bg-white border-2 border-[#bd1522] text-[#bd1522] px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-red-50 transition-all shadow-sm cursor-pointer"
     >
       <User size={18} />
       Meu Perfil

@@ -47,9 +47,12 @@ export function Header() {
           <div className="auth-area">
             <BotaoPerfil />
           </div>
-          <button className="hidden sm:block px-5 py-2 bg-white text-fogo-red text-sm font-bold rounded-lg shadow-sm hover:bg-gray-100 transition-colors">
-            <Link to="/cadastro">Cadastrar</Link>
-          </button>
+          <Link
+            to="/cadastro"
+            className="hidden sm:block px-5 py-2 bg-white text-fogo-red text-sm font-bold rounded-lg shadow-sm hover:bg-gray-100 transition-colors cursor-pointer"
+          >
+            Cadastrar
+          </Link>
         </div>
       </div>
     </header>

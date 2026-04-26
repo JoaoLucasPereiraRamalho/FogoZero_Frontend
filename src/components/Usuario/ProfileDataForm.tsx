@@ -128,7 +128,7 @@ export function ProfileDataForm() {
         <button
           type="submit"
           disabled={updating}
-          className="mt-4 bg-[#bd1522] text-white px-8 py-2 rounded-lg font-bold text-xs hover:bg-[#a0121d] transition-colors flex items-center gap-2 disabled:opacity-50"
+          className="mt-4 bg-[#bd1522] text-white px-8 py-2 rounded-lg font-bold text-xs hover:bg-[#a0121d] transition-colors flex items-center gap-2 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
         >
           {updating && <Loader2 size={14} className="animate-spin" />}
           Salvar alterações

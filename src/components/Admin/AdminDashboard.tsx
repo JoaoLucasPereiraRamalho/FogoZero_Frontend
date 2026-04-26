@@ -43,12 +43,6 @@ export default function AdminDashboard() {
               />
             ))}
           </div>
-
-          <div className="flex justify-end mt-10">
-            <button className="bg-[#bd1522] text-white px-8 py-3 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg shadow-red-900/20">
-              Editar notícias
-            </button>
-          </div>
         </div>
       </div>
     </main>

@@ -12,7 +12,12 @@ export function HeatMapSection() {
           <select className="border rounded-lg px-4 py-2 text-xs text-gray-500 outline-none">
             <option>Selecione a região</option>
           </select>
-          <button className="bg-[#bd1522] text-white px-4 py-2 rounded-lg text-xs font-bold">
+          <button
+            type="button"
+            disabled
+            title="Filtro em breve"
+            className="bg-[#bd1522] text-white px-4 py-2 rounded-lg text-xs font-bold cursor-not-allowed opacity-70"
+          >
             Período
           </button>
         </div>

@@ -42,7 +42,7 @@ export function ForgotPassword() {
         </p>
         <button
           onClick={() => navigate("/login")}
-          className="text-[#bd1522] font-bold hover:underline transition-all"
+          className="text-[#bd1522] font-bold hover:underline transition-all cursor-pointer"
         >
           Voltar para o login
         </button>
@@ -54,7 +54,7 @@ export function ForgotPassword() {
     <div className="max-w-md w-full py-8">
       <button
         onClick={() => navigate("/login")}
-        className="flex items-center gap-2 text-gray-500 hover:text-black mb-6 text-sm transition-all"
+        className="flex items-center gap-2 text-gray-500 hover:text-black mb-6 text-sm transition-all cursor-pointer"
       >
         <ArrowLeft size={16} /> Voltar ao login
       </button>
@@ -87,7 +87,7 @@ export function ForgotPassword() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#bd1522] text-white py-3 rounded-xl font-bold text-lg hover:bg-red-800 transition-all shadow-md flex justify-center items-center gap-2 disabled:opacity-50 mt-4 active:scale-95"
+          className="w-full bg-[#bd1522] text-white py-3 rounded-xl font-bold text-lg hover:bg-red-800 transition-all shadow-md flex justify-center items-center gap-2 disabled:opacity-50 mt-4 active:scale-95 cursor-pointer disabled:cursor-not-allowed"
         >
           {loading ? (
             <>

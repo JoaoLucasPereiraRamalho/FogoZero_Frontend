@@ -51,7 +51,12 @@ export function HeatMap() {
           </div>
 
           <div className="flex gap-2">
-            <button className="flex items-center gap-2 px-5 py-2.5 bg-[#900e18] text-white text-sm font-medium rounded hover:bg-[#6b0a12] transition-colors">
+            <button
+              type="button"
+              disabled
+              title="Filtro em breve"
+              className="flex items-center gap-2 px-5 py-2.5 bg-[#900e18] text-white text-sm font-medium rounded hover:bg-[#6b0a12] transition-colors cursor-not-allowed opacity-70"
+            >
               Município
               <svg
                 width="14"
@@ -66,7 +71,12 @@ export function HeatMap() {
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </button>
-            <button className="flex items-center gap-2 px-5 py-2.5 bg-[#900e18] text-white text-sm font-medium rounded hover:bg-[#6b0a12] transition-colors">
+            <button
+              type="button"
+              disabled
+              title="Filtro em breve"
+              className="flex items-center gap-2 px-5 py-2.5 bg-[#900e18] text-white text-sm font-medium rounded hover:bg-[#6b0a12] transition-colors cursor-not-allowed opacity-70"
+            >
               Período
               <svg
                 width="14"

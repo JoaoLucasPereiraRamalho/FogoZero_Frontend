@@ -174,7 +174,7 @@ export function AdminUserList() {
                       type="button"
                       onClick={() => handleExcluirUsuario(u)}
                       disabled={deletandoId === getUsuarioId(u)}
-                      className="inline-flex items-center justify-center p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors disabled:opacity-50"
+                      className="inline-flex items-center justify-center p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
                       title="Excluir usuário"
                       aria-label={`Excluir usuário ${u.nome}`}
                     >

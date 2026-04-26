@@ -59,7 +59,7 @@ export function ResetPassword() {
         </p>
         <button
           onClick={() => navigate("/login")}
-          className="text-[#bd1522] font-bold hover:underline"
+          className="text-[#bd1522] font-bold hover:underline cursor-pointer"
         >
           Ir para o login agora
         </button>
@@ -103,7 +103,7 @@ export function ResetPassword() {
         <button
           type="submit"
           disabled={loading || !token}
-          className="w-full bg-[#bd1522] text-white py-3 rounded-xl font-bold text-lg hover:bg-red-800 transition-all mt-4 flex justify-center items-center gap-2 disabled:opacity-50"
+          className="w-full bg-[#bd1522] text-white py-3 rounded-xl font-bold text-lg hover:bg-red-800 transition-all mt-4 flex justify-center items-center gap-2 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
         >
           {loading ? (
             <Loader2 className="animate-spin" size={20} />

@@ -31,13 +31,13 @@ export function AdminNewsCard({ noticia, onAction }: AdminNewsCardProps) {
           <div className="flex gap-2">
             <button
               onClick={() => onAction(noticia.id, "APROVADA")}
-              className="text-[10px] bg-green-600 text-white px-2 py-1 rounded font-bold hover:bg-green-700"
+              className="text-[10px] bg-green-600 text-white px-2 py-1 rounded font-bold hover:bg-green-700 cursor-pointer"
             >
               APROVAR
             </button>
             <button
               onClick={() => onAction(noticia.id, "REJEITADA")}
-              className="text-[10px] bg-gray-200 text-gray-700 px-2 py-1 rounded font-bold hover:bg-gray-300"
+              className="text-[10px] bg-gray-200 text-gray-700 px-2 py-1 rounded font-bold hover:bg-gray-300 cursor-pointer"
             >
               REJEITAR
             </button>

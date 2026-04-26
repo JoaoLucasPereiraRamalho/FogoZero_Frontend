@@ -82,13 +82,6 @@ export default function AdminPage() {
                   </div>
                 )}
               </div>
-
-              {/* Botão de Ação Inferior */}
-              <div className="flex justify-end mt-12">
-                <button className="bg-[#bd1522] text-white px-10 py-3 rounded-xl font-bold text-sm hover:bg-[#a0121d] transition-all shadow-lg shadow-red-900/10 active:scale-95">
-                  Editar notícias
-                </button>
-              </div>
             </>
           )}
         </div>

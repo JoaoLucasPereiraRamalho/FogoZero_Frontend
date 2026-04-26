@@ -52,7 +52,7 @@ export function Carrossel() {
 
         {/* Botão de Navegação Direita (igual ao da imagem) */}
         <button
-          className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-lg border border-white/30 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#bd1522] transition-all opacity-0 group-hover:opacity-100 shadow-xl"
+          className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-lg border border-white/30 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#bd1522] transition-all opacity-0 group-hover:opacity-100 shadow-xl cursor-pointer"
           onClick={() => setCurrent((prev) => (prev + 1) % SLIDES.length)}
         >
           <ChevronRight size={24} strokeWidth={3} />

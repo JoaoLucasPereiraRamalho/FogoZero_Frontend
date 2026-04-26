@@ -114,7 +114,7 @@ export function CityAlertsManager() {
         <button
           onClick={handleAdd}
           disabled={loading || !cidadeSelecionada}
-          className="self-end bg-[#bd1522] text-white px-6 py-2 rounded-lg font-bold text-xs uppercase disabled:opacity-50 flex items-center gap-2"
+          className="self-end bg-[#bd1522] text-white px-6 py-2 rounded-lg font-bold text-xs uppercase disabled:opacity-50 flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
         >
           {loading && <Loader2 size={12} className="animate-spin" />}
           Adicionar município
@@ -151,7 +151,7 @@ export function CityAlertsManager() {
                   </span>
                   <button
                     onClick={() => handleRemove(m.id)}
-                    className="bg-gray-800 text-white px-3 py-1 rounded text-[10px] font-bold hover:bg-black"
+                    className="bg-gray-800 text-white px-3 py-1 rounded text-[10px] font-bold hover:bg-black cursor-pointer"
                   >
                     Remover
                   </button>

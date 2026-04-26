@@ -266,7 +266,7 @@ export function ReportForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#bd1522] text-white font-bold py-3.5 rounded-xl hover:bg-red-800 transition-all shadow-md active:scale-[0.98] disabled:opacity-50"
+          className="w-full bg-[#bd1522] text-white font-bold py-3.5 rounded-xl hover:bg-red-800 transition-all shadow-md active:scale-[0.98] disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
         >
           {loading
             ? "Processando..."

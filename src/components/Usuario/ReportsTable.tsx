@@ -109,7 +109,15 @@ export function ReportsTable() {
                         : "-"}
                     </td>
                     <td className="py-4 text-right">
-                      <button className="bg-[#bd1522] text-white px-4 py-1.5 rounded-lg text-[11px] font-bold hover:bg-red-800 transition-all">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          alert(
+                            `Reporte #${String(r.id).padStart(2, "0")}\nTipo: ${r.tipo}\nData: ${r.data ? new Date(r.data).toLocaleString("pt-BR") : "-"}`,
+                          )
+                        }
+                        className="bg-[#bd1522] text-white px-4 py-1.5 rounded-lg text-[11px] font-bold hover:bg-red-800 transition-all cursor-pointer"
+                      >
                         Detalhes
                       </button>
                     </td>

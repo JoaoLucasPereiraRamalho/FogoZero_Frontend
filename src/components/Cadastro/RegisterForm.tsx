@@ -198,7 +198,7 @@ export function RegisterForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#bd1522] text-white py-3 rounded-xl font-bold text-lg hover:bg-[#a0121d] transition-all shadow-md active:scale-[0.98] flex justify-center items-center gap-2 disabled:opacity-70"
+          className="w-full bg-[#bd1522] text-white py-3 rounded-xl font-bold text-lg hover:bg-[#a0121d] transition-all shadow-md active:scale-[0.98] flex justify-center items-center gap-2 disabled:opacity-70 cursor-pointer disabled:cursor-not-allowed"
         >
           {loading ? (
             <>

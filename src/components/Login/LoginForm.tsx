@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import authService from "../../services/auth"; // Importando seu service
 
 export function LoginForm() {
@@ -10,6 +10,7 @@ export function LoginForm() {
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const navigate = useNavigate();
 
@@ -83,17 +84,21 @@ export function LoginForm() {
           <div className="relative flex items-center">
             <Lock className="absolute left-3 text-gray-400" size={18} />
             <input
-              type="password"
+              type={mostrarSenha ? "text" : "password"}
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               placeholder="Insira sua senha aqui"
               className="w-full p-2.5 pl-10 pr-10 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all"
               required
             />
-            <Eye
-              className="absolute right-3 text-gray-400 cursor-pointer"
-              size={18}
-            />
+            <button
+              type="button"
+              onClick={() => setMostrarSenha((prev) => !prev)}
+              className="absolute right-3 text-gray-400 cursor-pointer bg-transparent border-0 p-0"
+              aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+            >
+              {mostrarSenha ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
         </div>
 
@@ -103,31 +108,31 @@ export function LoginForm() {
             <input type="checkbox" className="w-4 h-4 accent-[#bd1522]" />
             Manter conectado
           </label>
-          <a
-            href="#"
-            className="text-xs text-[#bd1522] font-medium hover:underline"
+          <Link
+            to="/forgot-password"
+            className="text-xs text-[#bd1522] font-medium hover:underline cursor-pointer"
           >
             Esqueceu sua senha?
-          </a>
+          </Link>
         </div>
 
         {/* Botão de Ação */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#bd1522] text-white py-3.5 rounded-xl font-bold text-base hover:bg-[#a0121d] transition-all shadow-md active:scale-[0.98] mb-4 disabled:opacity-70"
+          className="w-full bg-[#bd1522] text-white py-3.5 rounded-xl font-bold text-base hover:bg-[#a0121d] transition-all shadow-md active:scale-[0.98] mb-4 disabled:opacity-70 cursor-pointer disabled:cursor-not-allowed"
         >
           {loading ? "Carregando..." : "Acessar Minha Conta"}
         </button>
 
         <p className="text-center text-xs text-gray-500">
           Não tem uma conta?{" "}
-          <a
-            href="/cadastro"
-            className="text-[#bd1522] font-bold hover:underline"
+          <Link
+            to="/cadastro"
+            className="text-[#bd1522] font-bold hover:underline cursor-pointer"
           >
             Cadastre-se aqui!
-          </a>
+          </Link>
         </p>
       </form>
     </div>
